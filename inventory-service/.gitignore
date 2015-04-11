@@ -1,0 +1,24 @@
+### https://raw.github.com/github/gitignore/b2c694d792c005c770c42deaa868e97184e31794/scala.gitignore
+
+*.class
+*.log
+
+# sbt specific
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+
+### https://raw.github.com/github/gitignore/b2c694d792c005c770c42deaa868e97184e31794/Global/intellij.gitignore
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+

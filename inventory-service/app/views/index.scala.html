@@ -1,0 +1,29 @@
+@(errorRate:Double, minDelay:Int, maxDelay: Int)
+@import helper.twitterBootstrap._
+
+
+@main("Shitty Inventory Service") {
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <h1>Shitty Inventory Service</h1>
+        <p>
+            Shitty inventory service
+        </p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">Error Rate:</div>
+            <div class="col-md-1">@errorRate</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">Min delay:</div>
+            <div class="col-md-1">@minDelay</div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">Max delay:</div>
+            <div class="col-md-1">@maxDelay</div>
+        </div>
+    </div>
+</div>
+}
