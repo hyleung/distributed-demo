@@ -25,5 +25,10 @@ class ApplicationSpec extends Specification {
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
     }
+
+    "return 200 on submit" in new WithApplication {
+      val response = route(FakeRequest(POST,"/submit")).get
+      status(response) must equalTo(OK)
+    }
   }
 }
