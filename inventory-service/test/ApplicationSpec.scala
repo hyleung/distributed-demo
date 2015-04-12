@@ -4,6 +4,7 @@ import org.junit.runner._
 
 import play.api.test._
 import play.api.test.Helpers._
+import play.api.libs.json.Json
 
 /**
  * Add your spec here.
@@ -27,7 +28,12 @@ class ApplicationSpec extends Specification {
     }
 
     "return 200 on submit" in new WithApplication {
-      val response = route(FakeRequest(POST,"/submit")).get
+      val response = route(FakeRequest(POST,"/submit").withJsonBody(
+      Json.obj(
+        "errorRate" -> 0.5,
+        "minDelay" -> 100,
+        "maxDelay" -> 100)
+      )).get
       status(response) must equalTo(OK)
     }
   }
