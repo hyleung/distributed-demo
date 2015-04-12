@@ -7,17 +7,19 @@ import play.api.mvc._
 import play.api.Play.current
 import scala.language.postfixOps
 object Application extends Controller {
-
+  var errorRate = Play.application.configuration.getDouble("service.errorRate").get
+  var minDelay  = Play.application.configuration.getInt("service.minDelay").get
+  var maxDelay = Play.application.configuration.getInt("service.maxDelay").get
   def index = Action {
-    val errorRate = Play.application.configuration.getDouble("service.errorRate").get
-    val minDelay = Play.application.configuration.getInt("service.minDelay").get
-    val maxDelay = Play.application.configuration.getInt("service.maxDelay").get
     Ok(views.html.index(errorRate, minDelay, maxDelay))
   }
 
   def submit = Action(parse.json) { implicit request =>
     request.body.asOpt[ServiceSettings] match {
       case Some(settings) =>
+        errorRate = settings.errorRate
+        minDelay = settings.minDelay
+        maxDelay = settings.maxDelay
         Ok(s"settings: $settings")
       case None =>
         BadRequest(request.body)
