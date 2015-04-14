@@ -1,29 +1,89 @@
-@(errorRate:Double, minDelay:Int, maxDelay: Int)
+@(implicit req:RequestHeader, errorRate:Double, minDelay:Int, maxDelay: Int)
 @import helper.twitterBootstrap._
-
+@helper.javascriptRouter("jsRoutes")(
+    routes.javascript.Application.submit
+)
 
 @main("Shitty Inventory Service") {
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
         <h1>Shitty Inventory Service</h1>
-        <p>
-            Shitty inventory service
-        </p>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">Error Rate:</div>
-            <div class="col-md-1">@errorRate</div>
-        </div>
-        <div class="row">
-            <div class="col-md-2">Min delay:</div>
-            <div class="col-md-1">@minDelay</div>
-        </div>
-        <div class="row">
-            <div class="col-md-2">Max delay:</div>
-            <div class="col-md-1">@maxDelay</div>
-        </div>
     </div>
 </div>
+    <div class="container">
+        <p>
+            Set the error rates and min/max latency below…
+        </p>
+        <form class="form-horizontal" role="form" id="theForm" >
+            <div id="formErrors" class="error">
+            <div id="successAlert" class="alert alert-success" role="alert">Saved!</div>
+            </div>
+            <div class="form-group" id="errorRateGroup">
+                <label id="errorRateLabel" class="col-sm-2 control-label" for="errorRate">Error Rate</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" id="errorRate" placeholder="Error rate (@errorRate)"
+                       data-parsley-required-message="Error rate is required"
+                       data-parsley-errors-container="#formErrors"
+                       data-parsley-class-handler="#errorRateGroup" required/>
+                </div>
+            </div>
+            <div class="form-group" id="minLatencyGroup">
+                <label class="col-sm-2 control-label" for="minLatency">Min latency</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" id="minLatency" placeholder="Min Latency (@minDelay)"
+                       data-parsley-required-message="Min latency is required"
+                       data-parsley-errors-container="#formErrors"
+                       data-parsley-class-handler="#minLatencyGroup"
+                       required/>
+                </div>
+             </div>
+            <div class="form-group" id="maxMaxLatencyGroup">
+                <label class="col-sm-2 control-label" for="maxLatency">Max latency</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" id="maxLatency" placeholder="Max Latency (@maxDelay)"
+                       data-parsley-required-message="Max latency is required"
+                       data-parsley-errors-container="#formErrors"
+                       data-parsley-class-handler="#maxMaxLatencyGroup"
+                       required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-default" id="setButton">Set</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+<script type="text/javascript">
+    $().ready(function(){
+       $('#successAlert').hide();
+       $('#setButton').click(function(){
+           var valid = $("#theForm").parsley({errorClass:"has-error"}).validate();
+           if(valid == true) {
+               var data =  {
+                errorRate:Number($('#errorRate').val()),
+                minDelay:Number($('#minLatency').val()),
+                maxDelay:Number($('#maxLatency').val())};
+
+               $.ajax( {
+                type:'POST',
+                url:'/submit',
+                data:JSON.stringify(data),
+                complete:function(result){
+                    console.log(result)
+                    $('#successAlert').show();
+                    setTimeout(function(){$('#successAlert').hide(500)}, 2000);
+                },
+                dataType:'json',
+                contentType:'application/json'});
+            }
+        });
+    });
+
+</script>
+
 }

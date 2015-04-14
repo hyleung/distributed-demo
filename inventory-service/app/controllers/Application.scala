@@ -10,8 +10,8 @@ object Application extends Controller {
   var errorRate = Play.application.configuration.getDouble("service.errorRate").get
   var minDelay  = Play.application.configuration.getInt("service.minDelay").get
   var maxDelay = Play.application.configuration.getInt("service.maxDelay").get
-  def index = Action {
-    Ok(views.html.index(errorRate, minDelay, maxDelay))
+  def index = Action { implicit request =>
+    Ok(views.html.index(request, errorRate, minDelay, maxDelay))
   }
 
   def submit = Action(parse.json) { implicit request =>
