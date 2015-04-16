@@ -17,16 +17,27 @@ import scala.util.Random
  */
 object Inventory extends Controller{
 
-  def retrieveStoreInventory(id:String) = Action {
-    val json = Json.toJson(
-      List(
-        StoreAvailability("Cambie",100),
-        StoreAvailability("Downtown",100),
-        StoreAvailability("Broadway",100),
-        StoreAvailability("Burnaby",100)
-      )
-    )
-    Ok(json)
+  def retrieveStoreInventory(id:String) = Action.async {
+    val timeout = Application.minDelay + Random.nextInt(Application.maxDelay)
+
+    val delay:Future[Boolean] = Future{
+      Thread.sleep(timeout)
+      !(Random.nextFloat() <= Application.errorRate)
+    }
+     delay.map {
+       case true =>
+         val json = Json.toJson(
+           List(
+             StoreAvailability("Cambie", 100),
+             StoreAvailability("Downtown", 100),
+             StoreAvailability("Broadway", 100),
+             StoreAvailability("Burnaby", 100)
+           )
+         )
+         Ok(json)
+       case _ => InternalServerError
+     }
+
   }
   implicit val resultWrite = new Writes[StoreAvailability] {
     override def writes(o: StoreAvailability) = Json.obj(
