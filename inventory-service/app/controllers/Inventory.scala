@@ -25,7 +25,7 @@ object Inventory extends Controller {
 
 		result map {
 			case Success(availability) => Ok(Json.toJson(availability))
-			case Failure(err) => BadRequest("ruh-roh")
+			case Failure(err) => InternalServerError("ruh-roh")
 		}
 	}
 
