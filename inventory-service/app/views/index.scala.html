@@ -1,89 +1,123 @@
 @(implicit req:RequestHeader, errorRate:Double, minDelay:Int, maxDelay: Int)
 @import helper.twitterBootstrap._
 @helper.javascriptRouter("jsRoutes")(
-    routes.javascript.Application.submit
+	routes.javascript.Application.submit
 )
 
-@main("Shitty Inventory Service") {
-<!-- Main jumbotron for a primary marketing message or call to action -->
+@main("Inventory Service") {
+<style type="text/css">
+	.slider-selection {
+		background: #BABABA;
+	}
+	b.slide-label {
+		padding-right:	10px;
+		padding-left:	10px;
+	}
+	div.slider {
+		padding-top:	7px;
+	}
+</style>
 <div class="jumbotron">
-    <div class="container">
-        <h1>Shitty Inventory Service</h1>
-    </div>
+	<div class="container">
+		<h1 id="title">Inventory Service</h1>
+	</div>
 </div>
-    <div class="container">
-        <p>
-            Set the error rates and min/max latency below…
-        </p>
-        <form class="form-horizontal" role="form" id="theForm" >
-            <div id="formErrors" class="error">
-            <div id="successAlert" class="alert alert-success" role="alert">Saved!</div>
-            </div>
-            <div class="form-group" id="errorRateGroup">
-                <label id="errorRateLabel" class="col-sm-2 control-label" for="errorRate">Error Rate</label>
-                <div class="col-sm-10">
-                <input type="text" class="form-control" id="errorRate" placeholder="Error rate (@errorRate)"
-                       data-parsley-required-message="Error rate is required"
-                       data-parsley-errors-container="#formErrors"
-                       data-parsley-class-handler="#errorRateGroup" required/>
-                </div>
-            </div>
-            <div class="form-group" id="minLatencyGroup">
-                <label class="col-sm-2 control-label" for="minLatency">Min latency</label>
-                <div class="col-sm-10">
-                <input type="text" class="form-control" id="minLatency" placeholder="Min Latency (@minDelay)"
-                       data-parsley-required-message="Min latency is required"
-                       data-parsley-errors-container="#formErrors"
-                       data-parsley-class-handler="#minLatencyGroup"
-                       required/>
-                </div>
-             </div>
-            <div class="form-group" id="maxMaxLatencyGroup">
-                <label class="col-sm-2 control-label" for="maxLatency">Max latency</label>
-                <div class="col-sm-10">
-                <input type="text" class="form-control" id="maxLatency" placeholder="Max Latency (@maxDelay)"
-                       data-parsley-required-message="Max latency is required"
-                       data-parsley-errors-container="#formErrors"
-                       data-parsley-class-handler="#maxMaxLatencyGroup"
-                       required/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" class="btn btn-default" id="setButton">Set</button>
-                </div>
-            </div>
-        </form>
+	<div class="container">
+		<p>
+			Set the error rates and min/max latency below…
+		</p>
+		<div class="form-horizontal" role="form" id="theForm" >
+			<div class="form-group" id="errorRateGroup">
+				<label id="errorRateLabel" class="col-sm-2 control-label" for="errorRate">Error Rate</label>
+				<div class="col-sm-10 slider">
+					<input class="form-control" id="errorRate" data-slider-id='errorRateSlider'
+						   type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1"
+						   data-slider-value="@{errorRate * 100}"/>
+				</div>
+			</div>
+			<div class="form-group" id="minLatencyGroup">
+				<label class="col-sm-2 control-label" for="latency">Latency</label>
+				<div class="col-sm-10 slider">
+					<b class="slide-label">0</b>
+					<input class="form-control" id="latency" type="text"value=""
+						   data-slider-min="0" data-slider-max="2500" data-slider-step="25"
+						   data-slider-value="[@{minDelay},@{maxDelay}]"/>
+					<b class="slide-label">2500 millis</b>
+				</div>
+			 </div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-default col-sm-4" id="setButton">Set</button>
+				</div>
+			</div>
 
-    </div>
+		</div>
 
-
+	</div>
 <script type="text/javascript">
-    $().ready(function(){
-       $('#successAlert').hide();
-       $('#setButton').click(function(){
-           var valid = $("#theForm").parsley({errorClass:"has-error"}).validate();
-           if(valid == true) {
-               var data =  {
-                errorRate:Number($('#errorRate').val()),
-                minDelay:Number($('#minLatency').val()),
-                maxDelay:Number($('#maxLatency').val())};
+	$().ready(function(){
+	   updateTitle(@{errorRate * 100});
+	   $('#setButton').click(function(){
+			var latency =$('#latency').val().split(',').map(Number)
+			var data =  {
+				errorRate:Number($('#errorRate').val())/100,
+				minDelay:latency[0],
+				maxDelay:latency[1]
+			}
 
-               $.ajax( {
-                type:'POST',
-                url:'/submit',
-                data:JSON.stringify(data),
-                complete:function(result){
-                    console.log(result)
-                    $('#successAlert').show();
-                    setTimeout(function(){$('#successAlert').hide(500)}, 2000);
-                },
-                dataType:'json',
-                contentType:'application/json'});
-            }
-        });
-    });
+			$.ajax( {
+				type:'POST',
+				url:'/submit',
+				data:JSON.stringify(data),
+				complete:function(result){
+					$('#setButton').text('Saved!');
+					$('#setButton').animate({backgroundColor:'##DAF3D8'});
+					setTimeout(function(){
+						$('#setButton').animate({backgroundColor:'#FFFFFF'});
+						$('#setButton').text('Set');
+					}, 2000);
+				},
+				dataType:'json',
+				contentType:'application/json'
+			});
+		});
 
+		$('#errorRate').slider({
+	        formatter: function(value) {
+		        return 'Current value: ' + value;
+	        }
+		}).on('slide', errorRateChange);
+
+		$("#latency").slider({})
+			.on('slide',onLatencyChanged);;
+	});
+
+	var errorRateChange = function(slideEvt) {
+		//console.log(slideEvt.value)
+		updateTitle(slideEvt.value)
+	};
+
+	var onLatencyChanged = function(slideEvt) {
+		//console.log(slideEvt.value)
+	};
+
+	var updateTitle = function(errorRate) {
+		if (errorRate > 75) {
+			$('#title').text('[Seriously?]');
+		}
+		else if (errorRate > 50) {
+			$('#title').text('(Really Shitty) Inventory Service');
+		}
+		else if (errorRate > 20) {
+			$('#title').text('(Pretty Shitty) Inventory Service');
+		}
+		else if (errorRate > 10) {
+			$('#title').text('(Sort-of-shitty) Inventory Service');
+		}
+		else {
+			$('#title').text('Inventory Service');
+		}
+	}
 </script>
 
 }
