@@ -19,7 +19,7 @@ object Inventory extends Controller {
 		val timeout = Application.minDelay + Random.nextInt(Application.maxDelay)
 
 		val result = for {
-			x <- delay(timeout)
+			_ <- delay(timeout)
 			f <- fetchInventory(id)
 		} yield f
 
