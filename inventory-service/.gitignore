@@ -1,0 +1,20 @@
+/target
+/lib
+/classes
+/checkouts
+pom.xml
+*.jar
+*.class
+/.lein-*
+/.env
+*.log
+### https://raw.github.com/github/gitignore/b2c694d792c005c770c42deaa868e97184e31794/clojure.gitignore
+
+pom.xml
+*jar
+/lib/
+/classes/
+/targets/
+.lein-deps-sum
+
+
