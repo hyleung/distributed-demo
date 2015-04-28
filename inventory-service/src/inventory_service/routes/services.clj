@@ -1,11 +1,12 @@
 (ns inventory-service.routes.services
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [inventory-service.logic.inventory :refer :all]))
 
-(s/defschema AvailabilityInfo {:id s/Str 
+(s/defschema AvailabilityInfo {:id s/Str
                                :inStock s/Bool
-                               :count  s/Int })
+                               :count s/Int})
 
 (defapi service-routes
   (ring.swagger.ui/swagger-ui
@@ -13,14 +14,14 @@
   (swagger-docs
     :title "ABC Company eCommerce")
   (swaggered "Inventory"
-             :description "Warehouse Inventory Service"
-             (context "/api" []
+    :description "Warehouse Inventory Service"
+    (context "/api" []
 
-                      (GET* "/availability/:productId" [productId]
-                            :return      AvailabilityInfo 
-                            :query-params []
-                            :summary      "Retrieve availability information for a given product"
-                            (ok {:id productId :inStock true :count 100}))
-                      )
-             )
+      (GET* "/availability/:productId" [productId]
+        :return AvailabilityInfo
+        :query-params []
+        :summary "Retrieve availability information for a given product"
+        (ok (fetchInventory productId)))
+      )
+    )
   )
