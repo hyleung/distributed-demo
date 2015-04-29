@@ -10,3 +10,13 @@
            result (fetchInventory expected)]
       (is (not-nil? result))
       (is (= expected (result :id))))))
+
+(deftest test-fetch-inventory
+  (let [expectedCount 200]
+    (with-redefs [inventory-service.logic.inventory/fetchCount (fn[] expectedCount)]
+      (testing "should fetch count"
+        (let [ expected "abcde"
+               result (fetchInventory expected)]
+          (is (= expectedCount (result :count)))
+          ))))
+  )
