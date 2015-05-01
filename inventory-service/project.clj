@@ -1,4 +1,4 @@
-(defproject inventory-service "0.1.0-SNAPSHOT"
+(defproject inventoryService "0.1.0-SNAPSHOT"
 
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
@@ -19,14 +19,15 @@
                  [bouncer "0.3.2"]
                  [prone "0.8.1"]
                  [metosin/compojure-api "0.19.3"]
-                 [metosin/ring-swagger-ui "2.1.0-M2-2"]]
+                 [metosin/ring-swagger-ui "2.1.0-M2-2"]
+                 [org.clojure/algo.monads "0.1.5"]]
 
   :min-lein-version "2.0.0"
-  :uberjar-name "inventory-service.jar"
-  :repl-options {:init-ns inventory-service.handler}
+  :uberjar-name "inventoryService.jar"
+  :repl-options {:init-ns inventoryService.handler}
   :jvm-opts ["-server"]
 
-  :main inventory-service.core
+  :main inventoryService.core
 
   :plugins [[lein-ring "0.9.1"]
             [lein-environ "1.0.0"]
@@ -36,10 +37,10 @@
 
   
 
-  :ring {:handler inventory-service.handler/app
-         :init    inventory-service.handler/init
-         :destroy inventory-service.handler/destroy
-         :uberwar-name "inventory-service.war"}
+  :ring {:handler inventoryService.handler/app
+         :init    inventoryService.handler/init
+         :destroy inventoryService.handler/destroy
+         :uberwar-name "inventoryService.war"}
   
   
   
@@ -51,12 +52,13 @@
    :dev {:dependencies [[ring-mock "0.1.5"]
                         [ring/ring-devel "1.3.2"]
                         [pjstadig/humane-test-output "0.7.0"]
+                        [midje "1.6.3"]
                         ]
          :source-paths ["env/dev/clj"]
          
          
          
-         :repl-options {:init-ns inventory-service.repl}
+         :repl-options {:init-ns inventoryService.repl}
          :injections [(require 'pjstadig.humane-test-output)
                       (pjstadig.humane-test-output/activate!)]
          :env {:dev true}}})

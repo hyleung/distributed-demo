@@ -1,6 +1,6 @@
-(ns inventory-service.test.inventory
+(ns inventoryService.test.inventory
   (:use   clojure.test
-          inventory-service.logic.inventory))
+          inventoryService.logic.inventory))
 
 (def not-nil? (complement nil?))
 
@@ -13,7 +13,7 @@
 
 (deftest test-fetch-inventory
   (let [expectedCount 200]
-    (with-redefs [inventory-service.logic.inventory/fetchCount (fn[] expectedCount)]
+    (with-redefs [inventoryService.logic.inventory/fetchCount (fn[] expectedCount)]
       (testing "should fetch count"
         (let [ expected "abcde"
                result (fetchInventory expected)]

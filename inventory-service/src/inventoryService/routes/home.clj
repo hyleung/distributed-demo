@@ -1,5 +1,5 @@
-(ns inventory-service.routes.home
-  (:require [inventory-service.layout :as layout]
+(ns inventoryService.routes.home
+  (:require [inventoryService.layout :as layout]
             [compojure.core :refer [defroutes GET]]
             [clojure.java.io :as io]))
 

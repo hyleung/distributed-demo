@@ -1,7 +1,7 @@
-(ns inventory-service.test.handler
+(ns inventoryService.test.handler
   (:use clojure.test
         ring.mock.request
-        inventory-service.handler))
+        inventoryService.handler))
 
 (deftest test-app
   (testing "main route"

@@ -1,10 +1,10 @@
-(ns inventory-service.handler
+(ns inventoryService.handler
   (:require [compojure.core :refer [defroutes routes]]
-            [inventory-service.routes.home :refer [home-routes]]
-            [inventory-service.routes.services :refer [service-routes]]
-            [inventory-service.middleware
+            [inventoryService.routes.home :refer [home-routes]]
+            [inventoryService.routes.services :refer [service-routes]]
+            [inventoryService.middleware
              :refer [development-middleware production-middleware]]
-            [inventory-service.session :as session]
+            [inventoryService.session :as session]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.rotor :as rotor]
@@ -37,14 +37,14 @@
   (if (env :dev) (parser/cache-off!))
   ;;start the expired session cleanup job
   (cronj/start! session/cleanup-job)
-  (timbre/info "\n-=[ inventory-service started successfully"
+  (timbre/info "\n-=[ inventoryService started successfully"
                (when (env :dev) "using the development profile") "]=-"))
 
 (defn destroy
   "destroy will be called when your application
    shuts down, put any clean up code here"
   []
-  (timbre/info "inventory-service is shutting down...")
+  (timbre/info "inventoryService is shutting down...")
   (cronj/shutdown! session/cleanup-job)
   (timbre/info "shutdown complete!"))
 

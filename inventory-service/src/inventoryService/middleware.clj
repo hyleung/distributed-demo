@@ -1,5 +1,5 @@
-(ns inventory-service.middleware
-  (:require [inventory-service.session :as session]
+(ns inventoryService.middleware
+  (:require [inventoryService.session :as session]
             [taoensso.timbre :as timbre]
             [environ.core :refer [env]]
             [selmer.middleware :refer [wrap-error-page]]

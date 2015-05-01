@@ -1,8 +1,8 @@
-(ns inventory-service.routes.services
+(ns inventoryService.routes.services
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [inventory-service.logic.inventory :refer :all]))
+            [inventoryService.logic.inventory :refer :all]))
 
 (s/defschema AvailabilityInfo {:id s/Str
                                :inStock s/Bool

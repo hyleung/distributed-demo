@@ -1,4 +1,4 @@
-(ns inventory-service.session
+(ns inventoryService.session
   (:require [cronj.core :refer [cronj]]))
 
 (defonce mem (atom {}))

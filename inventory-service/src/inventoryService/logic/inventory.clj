@@ -1,4 +1,4 @@
-(ns inventory-service.logic.inventory)
+(ns inventoryService.logic.inventory)
 
 ;;roll the dice for an error
 (defn roll-dice[errorRate]

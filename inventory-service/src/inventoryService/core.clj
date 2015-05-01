@@ -1,5 +1,5 @@
-(ns inventory-service.core
-  (:require [inventory-service.handler :refer [app]]
+(ns inventoryService.core
+  (:require [inventoryService.handler :refer [app]]
             [ring.adapter.jetty :refer [run-jetty]])
   (:gen-class))
 
