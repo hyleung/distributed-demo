@@ -33,5 +33,9 @@
         {:timeout (* 60 30)
          :timeout-response (redirect "/")})
       (wrap-defaults
-        (assoc-in site-defaults [:session :store] (memory-store session/mem)))
-      (wrap-internal-error :log #(timbre/error %))))
+        (-> site-defaults
+          (assoc-in [:session :store] (memory-store session/mem))
+          ;;disable anti-forgery protection
+          (assoc-in [:security :anti-forgery] false)))
+
+    (wrap-internal-error :log #(timbre/error %))))
