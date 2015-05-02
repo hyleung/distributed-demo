@@ -8,6 +8,10 @@
                                :inStock s/Bool
                                :count s/Int})
 
+(s/defschema SettingsInfo {:errorRate Double
+                           :minLatency s/Int
+                           :maxLatency s/Int})
+
 (defapi service-routes
   (ring.swagger.ui/swagger-ui
     "/swagger")
@@ -22,6 +26,16 @@
         :query-params []
         :summary "Retrieve availability information for a given product"
         (ok (fetchInventory productId)))
+      (GET* "/settings" []
+        :return SettingsInfo
+        :query-params []
+        :summary "Retrieve the current service settings"
+        (internal-server-error))
+      (PUT* "/settings" []
+        :body [settings SettingsInfo]
+        :summary "Update the service settings"
+        (internal-server-error)
+        )
       )
     )
   )
