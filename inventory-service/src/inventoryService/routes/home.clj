@@ -1,15 +1,14 @@
 (ns inventoryService.routes.home
   (:require [inventoryService.layout :as layout]
             [compojure.core :refer [defroutes GET]]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [inventoryService.logic.inventory :refer [getSettings]]))
 
 (defn home-page []
   (layout/render
-    "home.html" {:docs (-> "docs/docs.md" io/resource slurp)}))
+    "home.html" {:settings (getSettings)}))
 
-(defn about-page []
-  (layout/render "about.html"))
 
 (defroutes home-routes
   (GET "/" [] (home-page))
-  (GET "/about" [] (about-page)))
+  )
