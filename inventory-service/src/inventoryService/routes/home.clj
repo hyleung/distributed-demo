@@ -5,8 +5,10 @@
             [inventoryService.logic.inventory :refer [getSettings]]))
 
 (defn home-page []
-  (layout/render
-    "home.html" {:settings (assoc (getSettings) :errorRatePct (* 100 (:errorRate (getSettings))))}))
+  (let [settings (getSettings)]
+    (layout/render
+      "home.html" {:settings (assoc settings :errorRatePct (* 100 (:errorRate settings)))}))
+  )
 
 
 (defroutes home-routes
