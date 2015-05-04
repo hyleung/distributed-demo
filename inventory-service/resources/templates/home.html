@@ -21,6 +21,10 @@
   <p>
     Set the error rates and min/max latency below…
   </p>
+  <div id="errorMsg" class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>Ruh-roh!</strong> There was a problem saving your settings.
+  </div>
   <div class="form-horizontal" role="form" id="theForm" >
     <div class="form-group" id="errorRateGroup">
       <label id="errorRateLabel" class="col-sm-2 control-label" for="errorRate">Error Rate</label>
@@ -51,6 +55,7 @@
 </div>
 <script type="text/javascript">
 	$().ready(function(){
+	   $('#errorMsg').hide();
 	   updateTitle({{settings.errorRatePct}});
 	   $('#setButton').click(function(){
 			var latency =$('#latency').val().split(',').map(Number)
@@ -64,13 +69,16 @@
 				type:'POST',
 				url:'/submit',
 				data:JSON.stringify(data),
-				complete:function(result){
+				success:function(result){
 					$('#setButton').text('Saved!');
 					$('#setButton').animate({backgroundColor:'##DAF3D8'});
 					setTimeout(function(){
 						$('#setButton').animate({backgroundColor:'#FFFFFF'});
 						$('#setButton').text('Set');
 					}, 2000);
+				},
+				error:function(result){
+		            $('#errorMsg').show();
 				},
 				dataType:'json',
 				contentType:'application/json'
