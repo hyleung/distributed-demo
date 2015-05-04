@@ -6,7 +6,7 @@
 
 (defn home-page []
   (layout/render
-    "home.html" {:settings (getSettings)}))
+    "home.html" {:settings (assoc (getSettings) :errorRatePct (* 100 (:errorRate (getSettings))))}))
 
 
 (defroutes home-routes

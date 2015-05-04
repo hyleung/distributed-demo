@@ -2,7 +2,7 @@
 
 (defrecord ServiceSettings [errorRate minLatency maxLatency])
 
-(def service-settings (atom (ServiceSettings. 0 0 0)))
+(def service-settings (atom (ServiceSettings. 0.6 100 1000)))
 
 ;;roll the dice for an error
 (defn roll-dice[errorRate]
