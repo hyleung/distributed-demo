@@ -25,8 +25,8 @@
   (testing "should initialize settings to defaults"
     (let [result (getSettings)]
       (is (= 0 (:errorRate result)))
-      (is (= 0 (:minLatency result)))
-      (is (= 0 (:maxLatency result)))
+      (is (= 100 (:minLatency result)))
+      (is (= 500 (:maxLatency result)))
       ))
   (testing "should set settings"
     (setSettings 0.05 500 500)
