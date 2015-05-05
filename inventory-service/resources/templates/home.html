@@ -63,13 +63,13 @@
 			var latency =$('#latency').val().split(',').map(Number)
 			var data =  {
 				errorRate:Number($('#errorRate').val())/100,
-				minDelay:latency[0],
-				maxDelay:latency[1]
+				minLatency:latency[0],
+				maxLatency:latency[1]
 			}
 
 			$.ajax( {
-				type:'POST',
-				url:'/submit',
+				type:'PUT',
+				url:'/api/settings',
 				data:JSON.stringify(data),
 				success:function(result){
 					$('#setButton').text('Saved!');
