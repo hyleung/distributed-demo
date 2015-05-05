@@ -34,7 +34,7 @@
       (PUT* "/settings" []
         :body [settings SettingsInfo]
         :summary "Update the service settings"
-        (internal-server-error)
+        (ok (setSettings (:errorRate settings) (:minLatency settings) (:maxLatency settings)))
         )
       )
     )
