@@ -30,7 +30,7 @@
         :return SettingsInfo
         :query-params []
         :summary "Retrieve the current service settings"
-        (internal-server-error))
+        (ok (getSettings)))
       (PUT* "/settings" []
         :body [settings SettingsInfo]
         :summary "Update the service settings"
