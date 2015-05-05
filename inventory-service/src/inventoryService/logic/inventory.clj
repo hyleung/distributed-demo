@@ -6,13 +6,17 @@
 
 ;;roll the dice for an error
 (defn roll-dice[errorRate]
-  (< rand errorRate))
+  (< (rand) errorRate))
 
 (defn fetchCount[]
   100)
 
 (defn fetchInventory[productId]
-  {:id productId :inStock true :count (fetchCount )})
+  (if (roll-dice (:errorRate @service-settings))
+    (throw (Exception. "error"))
+    {:id productId :inStock true :count (fetchCount )}
+    )
+  )
 
 (defn setSettings[errorRate minLatency maxLatency]
   (do

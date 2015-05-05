@@ -1,5 +1,6 @@
 (ns inventoryService.test.inventory
   (:use   clojure.test
+          midje.sweet
           inventoryService.logic.inventory))
 
 (def not-nil? (complement nil?))
@@ -35,3 +36,15 @@
       (is (= 500 (:minLatency setting)))
       (is (= 500 (:maxLatency setting)))
       )))
+
+(facts "fetchInventory"
+  (fact "should return random error"
+    (fetchInventory anything) => (throws Exception)
+    (provided
+      (roll-dice anything) => true)
+    )
+  (fact "should return something"
+    (fetchInventory anything) => not-nil? 
+    (provided
+      (roll-dice anything) => false)
+    ))
