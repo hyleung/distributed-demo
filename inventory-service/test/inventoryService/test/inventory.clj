@@ -5,22 +5,19 @@
 
 (def not-nil? (complement nil?))
 
-(deftest test-logic
-  (testing "fetch inventory"
-    (let [ expected "abcd"
-           result (fetchInventory expected)]
-      (is (not-nil? result))
-      (is (= expected (result :id))))))
-
-(deftest test-fetch-inventory
-  (let [expectedCount 300]
-    (with-redefs [fetchCount (fn[] expectedCount)]
-      (testing "should fetch count"
-        (let [ expected "abcde"
-               result (fetchInventory expected)]
-          (is (= expectedCount (result :count)))
-          ))))
-  )
+(facts "fetch inventory"
+  (with-state-changes [(before :facts (resetSettings))]
+    (fact "should return data"
+      (fetchInventory anything) => not-nil?
+      (provided
+        (roll-dice anything) => false)
+    )
+    (fact "should return count"
+        (:count (fetchInventory "1234")) => 300
+        (provided
+          (roll-dice anything) => false
+          (fetchCount) => 300)
+        )))
 
 (facts "settings"
   (with-state-changes [(before :facts (resetSettings))]
