@@ -25,3 +25,6 @@
 
 (defn getSettings[]
   @service-settings)
+
+(defn resetSettings[]
+  (setSettings 0 100 500))
