@@ -25,7 +25,11 @@
         :return AvailabilityInfo
         :query-params []
         :summary "Retrieve availability information for a given product"
-        (ok (fetchInventory productId)))
+        (try
+          (ok (fetchInventory productId))
+          (catch Exception e
+            (internal-server-error "Ruh-roh!"))
+          ))
       (GET* "/settings" []
         :return SettingsInfo
         :query-params []
