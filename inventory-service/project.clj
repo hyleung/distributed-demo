@@ -32,6 +32,7 @@
   :plugins [[lein-ring "0.9.1"]
             [lein-environ "1.0.0"]
             [lein-ancient "0.6.5"]
+            [com.palletops/uberimage "0.4.1"]
             ]
   
 
