@@ -17,6 +17,7 @@
   (first (shuffle (range 0 500 10))))
 
 (defn fetchInventory[productId]
+  (Thread/sleep (random-delay))
   (if (roll-dice (:errorRate @service-settings))
     (throw (Exception. "error"))
     {:id productId :inStock true :count (fetchCount )}

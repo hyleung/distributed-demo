@@ -10,12 +10,14 @@
     (fact "should return data"
       (fetchInventory anything) => not-nil?
       (provided
-        (roll-dice anything) => false)
+        (roll-dice anything) => false
+        (random-delay) => 0)
     )
     (fact "should return count"
         (:count (fetchInventory "1234")) => 300
         (provided
           (roll-dice anything) => false
+          (random-delay) => 0
           (fetchCount) => 300)
         )))
 
@@ -36,15 +38,16 @@
         ))
     ))
 
-
 (facts "fetchInventory"
   (fact "should return random error"
     (fetchInventory anything) => (throws Exception)
     (provided
-      (roll-dice anything) => true)
+      (roll-dice anything) => true
+      (random-delay) => 0)
     )
   (fact "should return something"
     (fetchInventory anything) => not-nil? 
     (provided
-      (roll-dice anything) => false)
+      (roll-dice anything) => false
+      (random-delay) => 0)
     ))
