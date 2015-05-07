@@ -8,8 +8,13 @@
 (defn roll-dice[errorRate]
   (< (rand) errorRate))
 
+(defn random-delay[]
+  (first
+    (shuffle (range (:minLatency @service-settings) (:maxLatency @service-settings) 10)))
+  )
+
 (defn fetchCount[]
-  100)
+  (first (shuffle (range 0 500 10))))
 
 (defn fetchInventory[productId]
   (if (roll-dice (:errorRate @service-settings))
