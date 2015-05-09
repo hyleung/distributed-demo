@@ -23,17 +23,18 @@ To start a web server for the application, run:
 
     lein ring server
 
-
 ## Tests
 
 Uses [Midje](https://github.com/marick/Midje) for testing. Run it in the Leiningen repl:
 
     lein repl
     
-    (use 'midje.repl)
-    
     (autotest)
     
+Or (if you just want to run the tests once)
+
+    (load-facts)
+
 ## Docker
 
 The build includes the [lein-uberimage](https://github.com/palletops/lein-uberimage) plugin, which will build a Docker
