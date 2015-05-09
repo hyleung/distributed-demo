@@ -14,7 +14,7 @@
 </style>
 <div class="jumbotron">
   <div class="container">
-    <h1 id="title">Inventory Service</h1>
+    <h1 id="title">Availability Service</h1>
   </div>
 </div>
 <div id="errorMsg" class="alert alert-danger alert-dismissible" role="alert">
@@ -111,16 +111,16 @@
 			$('#title').text('[Seriously?]');
 		}
 		else if (errorRate > 50) {
-			$('#title').text('(Really Shitty) Inventory Service');
+			$('#title').text('(Really Shitty) Availability Service');
 		}
 		else if (errorRate > 20) {
-			$('#title').text('(Pretty Shitty) Inventory Service');
+			$('#title').text('(Pretty Shitty) Availability Service');
 		}
 		else if (errorRate > 10) {
-			$('#title').text('(Sort-of-shitty) Inventory Service');
+			$('#title').text('(Sort-of-shitty) Availability Service');
 		}
 		else {
-			$('#title').text('Inventory Service');
+			$('#title').text('Availability Service');
 		}
 	}
 </script>
