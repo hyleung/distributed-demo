@@ -1,7 +1,7 @@
 @(implicit req:RequestHeader, errorRate:Double, minDelay:Int, maxDelay: Int)
 @import helper.twitterBootstrap._
 @helper.javascriptRouter("jsRoutes")(
-	routes.javascript.Application.submit
+	routes.javascript.Application.updateSettings
 )
 
 @main("Inventory Service") {
@@ -68,8 +68,8 @@
 			}
 
 			$.ajax( {
-				type:'POST',
-				url:'/submit',
+				type:'PUT',
+				url:'/settings',
 				data:JSON.stringify(data),
 				complete:function(result){
 					$('#setButton').text('Saved!');

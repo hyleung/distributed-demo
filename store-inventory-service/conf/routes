@@ -4,7 +4,7 @@
 
 # Home page
 GET		/							controllers.Application.index
-POST	/submit						controllers.Application.submit
+PUT	/settings						controllers.Application.updateSettings
 
 #Inventory service
 GET		/inventory/:id				controllers.Inventory.retrieveStoreInventory(id)

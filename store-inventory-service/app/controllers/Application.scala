@@ -17,7 +17,7 @@ object Application extends Controller {
 		Ok(views.html.index(request, errorRate, minDelay, maxDelay))
 	}
 
-	def submit = Action(parse.json) { implicit request =>
+	def updateSettings = Action(parse.json) { implicit request =>
 		request.body.asOpt[ServiceSettings] match {
 			case Some(settings) =>
 				errorRate = settings.errorRate
