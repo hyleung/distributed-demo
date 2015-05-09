@@ -1,5 +1,9 @@
-(ns inventory-service.repl
-  (:use inventory-service.handler
+(ns inventoryService.repl
+  (:use inventoryService.handler
+        inventoryService.logic.inventory
+        inventoryService.test.inventory
+        inventoryService.test.handler
+        midje.repl
     ring.server.standalone
     [ring.middleware file-info file]))
 

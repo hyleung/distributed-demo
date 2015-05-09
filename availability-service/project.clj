@@ -1,4 +1,4 @@
-(defproject inventoryService "0.1.0-SNAPSHOT"
+(defproject availabilityService "0.1.0-SNAPSHOT"
 
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
@@ -19,8 +19,7 @@
                  [bouncer "0.3.2"]
                  [prone "0.8.1"]
                  [metosin/compojure-api "0.19.3"]
-                 [metosin/ring-swagger-ui "2.1.0-M2-2"]
-                 [org.clojure/algo.monads "0.1.5"]]
+                 [metosin/ring-swagger-ui "2.1.0-M2-2"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "inventoryService.jar"
@@ -41,7 +40,7 @@
   :ring {:handler inventoryService.handler/app
          :init    inventoryService.handler/init
          :destroy inventoryService.handler/destroy
-         :uberwar-name "inventoryService.war"}
+         :uberwar-name "availabilityService.war"}
   
   
   

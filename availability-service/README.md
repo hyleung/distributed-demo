@@ -1,4 +1,4 @@
-#Inventory Service
+#Availability Service
 
 A really shitty web service for returning (dummy) product availability.
  
