@@ -11,5 +11,8 @@ dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.14'
+    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.14'
     testCompile "junit:junit:4.11"
 }
+
+jettyRun.contextPath = 'api'
