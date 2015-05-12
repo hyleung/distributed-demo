@@ -4,6 +4,10 @@
 
 (def service-settings (atom (ServiceSettings. 0 100 500)))
 
+
+(defn exec-delay[timeout]
+  (Thread/sleep timeout))
+
 ;;roll the dice for an error
 (defn roll-dice[errorRate]
   (< (rand) errorRate))
@@ -35,6 +39,3 @@
 
 (defn resetSettings[]
   (setSettings 0 100 500))
-
-(defn exec-delay[timeout]
-  (Thread/sleep timeout))
