@@ -10,6 +10,7 @@ import com.example.domain.ProductInfo;
  */
 public class ProductInfoService {
 	public ProductInfo retrieveProductInfo(String id) {
-		return new ProductInfo(id);
+		ProductInfo productInfo = new ProductInfo(id);
+		return productInfo;
 	}
 }

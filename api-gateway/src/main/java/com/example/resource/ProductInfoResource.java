@@ -1,6 +1,7 @@
 package com.example.resource;
 
 import com.example.domain.ProductInfo;
+import com.example.service.ProductAvailabilityService;
 import com.example.service.ProductInfoService;
 
 import javax.ws.rs.GET;
@@ -19,11 +20,14 @@ import javax.ws.rs.core.MediaType;
 @Path("/product")
 public class ProductInfoResource {
 	private final ProductInfoService productInfoService = new ProductInfoService();
+	private final ProductAvailabilityService availabilityService = new ProductAvailabilityService();
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductInfo retrieveInfo(@PathParam("id") String id) {
-		return productInfoService.retrieveProductInfo(id);
+		ProductInfo productInfo = productInfoService.retrieveProductInfo(id);
+		productInfo.setInStock(availabilityService.isProductAvailable(id));
+		return productInfo;
 	}
 
 }
