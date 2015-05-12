@@ -9,15 +9,16 @@
   (< (rand) errorRate))
 
 (defn random-delay[]
-  (first
-    (shuffle (range (:minLatency @service-settings) (:maxLatency @service-settings) 10)))
-  )
+  (if (< (- (:maxLatency @service-settings) (:minLatency @service-settings)) 10)
+       10
+       (first
+         (shuffle (range (:minLatency @service-settings) (:maxLatency @service-settings) 10)))))
 
 (defn fetchCount[]
   (first (shuffle (range 0 500 10))))
 
 (defn fetchInventory[productId]
-  (Thread/sleep (random-delay))
+  (exec-delay (random-delay))
   (if (roll-dice (:errorRate @service-settings))
     (throw (Exception. "error"))
     {:id productId :inStock true :count (fetchCount )}
@@ -34,3 +35,6 @@
 
 (defn resetSettings[]
   (setSettings 0 100 500))
+
+(defn exec-delay[timeout]
+  (Thread/sleep timeout))
