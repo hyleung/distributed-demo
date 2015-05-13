@@ -5,8 +5,9 @@
 (def service-settings (atom (ServiceSettings. 0 100 500)))
 
 
-(defn exec-delay[timeout]
-  (Thread/sleep timeout))
+(defn exec-after-delay[timeout f]
+  (Thread/sleep timeout)
+  (f))
 
 ;;roll the dice for an error
 (defn roll-dice[errorRate]
@@ -22,10 +23,9 @@
   (first (shuffle (range 0 500 10))))
 
 (defn fetchInventory[productId]
-  (exec-delay (random-delay))
   (if (roll-dice (:errorRate @service-settings))
-    (throw (Exception. "error"))
-    {:id productId :inStock true :count (fetchCount )}
+    (exec-after-delay (:maxLatency @service-settings) #(throw (Exception. "error")))
+    (exec-after-delay (random-delay) #(eval {:id productId :inStock true :count (fetchCount )}))
     )
   )
 

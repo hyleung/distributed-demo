@@ -42,12 +42,16 @@
   (fact "should return random error"
     (fetchInventory anything) => (throws Exception)
     (provided
-      (roll-dice anything) => true
-      (random-delay) => 0)
+      (roll-dice anything) => true)
     )
   (fact "should return something"
-    (fetchInventory anything) => not-nil? 
+    (fetchInventory anything) => not-nil?
     (provided
       (roll-dice anything) => false
       (random-delay) => 0)
-    ))
+    )
+  (fact "should error after max delay"
+    (setSettings 1 0 100) => irrelevant
+    (fetchInventory anything) => (throws Exception)
+    (provided
+      (roll-dice anything) => true)))
