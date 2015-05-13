@@ -32,15 +32,19 @@ object Inventory extends Controller {
 	private def fetchInventory(id: String): Future[Try[Seq[StoreAvailability]]] = Future {
 		Random.nextFloat() > Application.errorRate match {
 			case true => Success(Seq(
-				StoreAvailability("Cambie", 100),
-				StoreAvailability("Downtown", 100),
-				StoreAvailability("Broadway", 100),
-				StoreAvailability("Burnaby", 100)
+				StoreAvailability("Cambie", randomCount),
+				StoreAvailability("Downtown", randomCount),
+				StoreAvailability("Broadway", randomCount),
+				StoreAvailability("Burnaby", randomCount)
 			))
 			case _ => Failure(new Exception())
 		}
 	}
 
+	private def randomCount:Int = {
+		Random.shuffle(
+			Range(0, 200, 10).toList).head
+	}
 	private def delay(timeout: Int) = Future {
 		Thread.sleep(timeout)
 	}
