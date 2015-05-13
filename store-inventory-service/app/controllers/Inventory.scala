@@ -1,10 +1,8 @@
 package controllers
 
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{Writes, _}
 import play.api.mvc.{Action, Controller}
 
-import scala.concurrent.Future
 import scala.util.{Failure, Random, Success, Try}
 
 /**
@@ -15,38 +13,39 @@ import scala.util.{Failure, Random, Success, Try}
  */
 object Inventory extends Controller {
 
-	def retrieveStoreInventory(id: String) = Action.async {
+	def retrieveStoreInventory(id: String) = Action {
 		val timeout = Application.minDelay + Random.nextInt(Application.maxDelay)
 
-		val result = for {
-			_ <- delay(timeout)
-			f <- fetchInventory(id)
-		} yield f
-
-		result map {
-			case Success(availability) => Ok(Json.toJson(availability))
-			case Failure(err) => InternalServerError("ruh-roh")
+		rollDice match {
+			case Success(_) =>
+				Thread.sleep(timeout)
+				val availability = fetchInventory(id)
+				Ok(Json.toJson(availability))
+			case Failure(e) =>
+				Thread.sleep(Application.maxDelay)
+				InternalServerError("ruh-roh!")
 		}
 	}
 
-	private def fetchInventory(id: String): Future[Try[Seq[StoreAvailability]]] = Future {
+	private def rollDice:Try[Boolean] = {
 		Random.nextFloat() > Application.errorRate match {
-			case true => Success(Seq(
+			case true => Success(true)
+			case _ => Failure(new Exception())
+		}
+	}
+
+	private def fetchInventory(id: String): Seq[StoreAvailability] =  {
+		Seq(
 				StoreAvailability("Cambie", randomCount),
 				StoreAvailability("Downtown", randomCount),
 				StoreAvailability("Broadway", randomCount),
 				StoreAvailability("Burnaby", randomCount)
-			))
-			case _ => Failure(new Exception())
-		}
+			)
 	}
 
 	private def randomCount:Int = {
 		Random.shuffle(
 			Range(0, 200, 10).toList).head
-	}
-	private def delay(timeout: Int) = Future {
-		Thread.sleep(timeout)
 	}
 
 	implicit val resultWrite = new Writes[StoreAvailability] {
