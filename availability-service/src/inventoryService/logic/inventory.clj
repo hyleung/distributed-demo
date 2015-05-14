@@ -1,9 +1,9 @@
 (ns inventoryService.logic.inventory)
 
-(defrecord ServiceSettings [errorRate minLatency maxLatency])
+;;(defrecord ServiceSettings [errorRate minLatency maxLatency errorLatency])
 
-(def service-settings (atom (ServiceSettings. 0 100 500)))
-
+;;(def service-settings (atom (ServiceSettings. 0 100 500 2000)))
+(def service-settings (atom {:errorRate 0  :minLatency 100 :maxLatency 500  :errorLatency 2000}))
 
 (defn exec-after-delay[timeout f]
   (Thread/sleep timeout)
@@ -24,18 +24,18 @@
 
 (defn fetchInventory[productId]
   (if (roll-dice (:errorRate @service-settings))
-    (exec-after-delay (:maxLatency @service-settings) #(throw (Exception. "error")))
+    (exec-after-delay (:errorLatency @service-settings) #(throw (Exception. "error")))
     (exec-after-delay (random-delay) #(eval {:id productId :inStock true :count (fetchCount )}))
     )
   )
 
-(defn setSettings[errorRate minLatency maxLatency]
+(defn setSettings[errorRate minLatency maxLatency errorLatency]
   (do
-    (swap! service-settings (fn[x] (ServiceSettings. errorRate minLatency maxLatency))) @service-settings
+    (swap! service-settings (fn[x] {:errorRate errorRate  :minLatency minLatency :maxLatency maxLatency  :errorLatency errorLatency})) @service-settings
   ))
 
 (defn getSettings[]
   @service-settings)
 
 (defn resetSettings[]
-  (setSettings 0 100 500))
+  (setSettings 0 100 500 2000))

@@ -10,7 +10,8 @@
 
 (s/defschema SettingsInfo {:errorRate Double
                            :minLatency s/Int
-                           :maxLatency s/Int})
+                           :maxLatency s/Int
+                           :errorLatency s/Int})
 
 (defapi service-routes
   (ring.swagger.ui/swagger-ui
@@ -38,7 +39,7 @@
       (PUT* "/settings" []
         :body [settings SettingsInfo]
         :summary "Update the service settings"
-        (ok (setSettings (:errorRate settings) (:minLatency settings) (:maxLatency settings)))
+        (ok (setSettings (:errorRate settings) (:minLatency settings) (:maxLatency settings) (:errorLatency settings)))
         )
       )
     )

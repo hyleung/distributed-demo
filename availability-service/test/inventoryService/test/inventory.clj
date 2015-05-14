@@ -28,13 +28,15 @@
         (:errorRate result) => 0
         (:minLatency result) => 100
         (:maxLatency result) => 500
+        (:errorLatency result) => 2000
         ))
     (fact "should allow updates"
-      (setSettings 0.05 500 500)
+      (setSettings 0.05 500 500 3000)
       (let [result (getSettings)]
         (:errorRate result) => 0.05
         (:minLatency result) => 500
         (:maxLatency result) => 500
+        (:errorLatency result) => 3000
         ))
     ))
 
@@ -51,7 +53,7 @@
       (random-delay) => 0)
     )
   (fact "should error after max delay"
-    (setSettings 1 0 100) => irrelevant
+    (setSettings 1 0 100 0) => irrelevant
     (fetchInventory anything) => (throws Exception)
     (provided
       (roll-dice anything) => true)))
