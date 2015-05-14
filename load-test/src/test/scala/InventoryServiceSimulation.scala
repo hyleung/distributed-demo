@@ -18,5 +18,5 @@ class InventoryServiceSimulation extends Simulation{
 			.get("/inventory/1234"))
 			.pause(1)
 
-	setUp(scn.inject(rampUsers(100) over (10 seconds)).protocols(httpConf))
+	setUp(scn.inject(rampUsers(1000) over (60 seconds)).protocols(httpConf))
 }

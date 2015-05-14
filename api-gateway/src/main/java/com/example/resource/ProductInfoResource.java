@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 public class ProductInfoResource {
 	private final ProductInfoService productInfoService = new ProductInfoService();
 	private final ProductAvailabilityService availabilityService = new ProductAvailabilityService();
+
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
