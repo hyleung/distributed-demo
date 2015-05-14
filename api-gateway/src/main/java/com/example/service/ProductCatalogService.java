@@ -3,9 +3,11 @@ package com.example.service;
 import com.example.domain.ProductInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,16 @@ public class ProductCatalogService {
 	static {
 		catalog = readCatalog();
 	}
+
+	public ProductInfo retrieveProductInfo(final String id) {
+		return Iterables.find(catalog, new Predicate<ProductInfo>() {
+			@Override
+			public boolean apply(ProductInfo input) {
+				return input.getId().equals(id);
+			}
+		});
+	}
+
 	public List<ProductInfo> fetchAll() {
 		return catalog;
 	}
