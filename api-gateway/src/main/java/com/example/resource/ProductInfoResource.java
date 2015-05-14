@@ -1,7 +1,6 @@
 package com.example.resource;
 
 import com.example.domain.ProductInfo;
-import com.example.exception.ProductNotFoundException;
 import com.example.service.ProductAvailabilityService;
 import com.example.service.ProductCatalogService;
 
@@ -10,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
 
@@ -27,13 +27,18 @@ public class ProductInfoResource {
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductInfo retrieveInfo(@PathParam("id") String id) {
+	public Response retrieveInfo(@PathParam("id") String id) {
 		try {
 			ProductInfo productInfo = catalogService.retrieveProductInfo(id);
 			productInfo.setInStock(availabilityService.isProductAvailable(id));
-			return productInfo;
+			return Response
+					.ok(productInfo)
+					.build();
 		} catch (NoSuchElementException notFound) {
-			throw new ProductNotFoundException();
+			return Response
+					.status(Response.Status.NOT_FOUND)
+					.entity("Product not found")
+					.build();
 		}
 	}
 
