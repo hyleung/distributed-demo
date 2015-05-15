@@ -30,27 +30,34 @@
   <div class="form-horizontal" role="form" id="theForm" >
     <div class="form-group" id="errorRateGroup">
       <label id="errorRateLabel" class="col-sm-2 control-label" for="errorRate">Error Rate</label>
-      <div class="col-sm-10 slider">
-        <input class="form-control" id="errorRate" data-slider-id='errorRateSlider'
-               type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1"
-               data-slider-value="{{settings.errorRatePct}}"/>
-      </div>
-    </div>
-    <div class="form-group" id="minLatencyGroup">
-      <label class="col-sm-2 control-label" for="latency">Latency</label>
-      <div class="col-sm-10 slider">
-        <b class="slide-label">0</b>
-        <input class="form-control" id="latency" type="text"value=""
-               data-slider-min="0" data-slider-max="2500" data-slider-step="25"
-               data-slider-value="[{{settings.minLatency}},{{settings.maxLatency}}]"/>
-        <b class="slide-label">2500 millis</b>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="button" class="btn btn-default col-sm-4" id="setButton">Set</button>
-      </div>
-    </div>
+		<div class="col-sm-10 slider">
+			<input class="form-control" id="errorRate" data-slider-id='errorRateSlider'
+				   type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1"
+				   data-slider-value="{{settings.errorRatePct}}"/>
+		</div>
+		<label id="errorLatencyLabel" class="col-sm-2 control-label" for="errorLatency">Error Delay</label>
+		<div class="col-sm-10 slider">
+			<input class="form-control" id="errorLatency" data-slider-id='errorLatencySlider'
+				   type="text" data-slider-min="0" data-slider-max="2000" data-slider-step="10"
+				   data-slider-value="{{settings.errorLatency}}"/>
+		</div>
+	</div>
+		<div class="form-group" id="minLatencyGroup">
+		  <label class="col-sm-2 control-label" for="latency">Latency</label>
+
+		  <div class="col-sm-10 slider">
+			  <b class="slide-label">0</b>
+			  <input class="form-control" id="latency" type="text" value=""
+					 data-slider-min="0" data-slider-max="2500" data-slider-step="25"
+					 data-slider-value="[{{settings.minLatency}},{{settings.maxLatency}}]"/>
+			  <b class="slide-label">2500 millis</b>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <div class="col-sm-offset-2 col-sm-10">
+			  <button type="button" class="btn btn-default col-sm-4" id="setButton">Set</button>
+		  </div>
+		</div>
 
   </div>
 
@@ -65,7 +72,7 @@
 				errorRate:Number($('#errorRate').val())/100,
 				minLatency:latency[0],
 				maxLatency:latency[1],
-				errorLatency:2500
+				errorLatency:Number($('#errorLatency').val())
 			}
 
 			$.ajax( {
@@ -93,6 +100,11 @@
 		        return 'Current value: ' + value;
 	        }
 		}).on('slide', errorRateChange);
+		$('#errorLatency').slider({
+	        formatter: function(value) {
+		        return 'Current value: ' + value;
+	        }
+		});
 
 		$("#latency").slider({})
 			.on('slide',onLatencyChanged);;
