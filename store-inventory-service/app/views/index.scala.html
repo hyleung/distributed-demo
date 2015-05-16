@@ -1,4 +1,4 @@
-@(implicit req:RequestHeader, errorRate:Double, minDelay:Int, maxDelay: Int)
+@(implicit req:RequestHeader, errorRate:Double, minDelay:Int, maxDelay: Int, errorDelay: Int)
 @import helper.twitterBootstrap._
 @helper.javascriptRouter("jsRoutes")(
 	routes.javascript.Application.updateSettings
@@ -36,6 +36,12 @@
 					   type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1"
 					   data-slider-value="@{errorRate * 100}"/>
 			</div>
+			<label id="errorLatencyLabel" class="col-sm-2 control-label" for="errorLatency">Error Delay</label>
+			<div class="col-sm-10 slider">
+				<input class="form-control" id="errorLatency" data-slider-id='errorLatencySlider'
+					   type="text" data-slider-min="0" data-slider-max="2000" data-slider-step="10"
+					   data-slider-value="@{errorDelay}"/>
+			</div>
 		</div>
 		<div class="form-group" id="minLatencyGroup">
 			<label class="col-sm-2 control-label" for="latency">Latency</label>
@@ -64,12 +70,13 @@
 			var data =  {
 				errorRate:Number($('#errorRate').val())/100,
 				minDelay:latency[0],
-				maxDelay:latency[1]
+				maxDelay:latency[1],
+				errorDelay:Number($('#errorLatency').val())
 			}
 
 			$.ajax( {
 				type:'PUT',
-				url:'/settings',
+				url:'/api/settings',
 				data:JSON.stringify(data),
 				complete:function(result){
 					$('#setButton').text('Saved!');
@@ -89,6 +96,12 @@
 		        return 'Current value: ' + value;
 	        }
 		}).on('slide', errorRateChange);
+
+		$('#errorLatency').slider({
+	        formatter: function(value) {
+		        return 'Current value: ' + value;
+	        }
+		});
 
 		$("#latency").slider({})
 			.on('slide',onLatencyChanged);;

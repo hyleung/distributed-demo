@@ -22,7 +22,7 @@ object Inventory extends Controller {
 				val availability = fetchInventory(id)
 				Ok(Json.toJson(availability))
 			case Failure(e) =>
-				Thread.sleep(Application.maxDelay)
+				Thread.sleep(Application.errorDelay)
 				InternalServerError("ruh-roh!")
 		}
 	}

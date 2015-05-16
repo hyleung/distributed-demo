@@ -4,10 +4,11 @@
 
 # Home page
 GET		/							controllers.Application.index
-PUT	/settings						controllers.Application.updateSettings
+GET /api/settings						controllers.Application.retrieveSettings
+PUT	/api/settings						controllers.Application.updateSettings
 
 #Inventory service
-GET		/inventory/:id				controllers.Inventory.retrieveStoreInventory(id)
+GET		/api/inventory/:id				controllers.Inventory.retrieveStoreInventory(id)
 
 # Map static resources from the /public folder to the /assets URL path
 GET		/assets/*file				controllers.Assets.at(path="/public", file)
