@@ -53,7 +53,11 @@
       (random-delay) => 0)
     )
   (fact "should error after max delay"
-    (setSettings 1 0 100 0) => irrelevant
-    (fetchInventory anything) => (throws Exception)
-    (provided
-      (roll-dice anything) => true)))
+    (let [expectedDelay 200]
+      (setSettings 1 0 0 expectedDelay)
+      (fetchInventory anything) => irrelevant
+      (provided
+        (roll-dice anything) => true
+        (exec-after-delay expectedDelay anything) => irrelevant))
+      )
+    )
