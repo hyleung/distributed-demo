@@ -1,5 +1,7 @@
 package com.example.domain;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * Date: 15-05-10
@@ -21,6 +23,7 @@ public class ProductInfo {
 	double price;
 	String name;
 	String description;
+	List<StoreAvailability> storeAvailabilityList;
 
 	public String getId() {
 		return id;
@@ -60,5 +63,13 @@ public class ProductInfo {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<StoreAvailability> getStoreAvailabilityList() {
+		return storeAvailabilityList;
+	}
+
+	public void setStoreAvailabilityList(List<StoreAvailability> storeAvailabilityList) {
+		this.storeAvailabilityList = storeAvailabilityList;
 	}
 }

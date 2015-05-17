@@ -15,7 +15,7 @@ class InventoryServiceSimulation extends Simulation{
 
 	val scn = scenario("Scenario Name")
 		.exec(http("inventory")
-			.get("/inventory/1234"))
+			.get("/api/inventory/1234"))
 			.pause(1)
 
 	setUp(scn.inject(rampUsers(1000) over (60 seconds)).protocols(httpConf))

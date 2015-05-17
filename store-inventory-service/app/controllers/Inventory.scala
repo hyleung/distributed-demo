@@ -36,10 +36,10 @@ object Inventory extends Controller {
 
 	private def fetchInventory(id: String): Seq[StoreAvailability] =  {
 		Seq(
-				StoreAvailability("Cambie", randomCount),
-				StoreAvailability("Downtown", randomCount),
-				StoreAvailability("Broadway", randomCount),
-				StoreAvailability("Burnaby", randomCount)
+				StoreAvailability(1, "Cambie", randomCount),
+				StoreAvailability(2, "Downtown", randomCount),
+				StoreAvailability(3, "Broadway", randomCount),
+				StoreAvailability(4, "Burnaby", randomCount)
 			)
 	}
 
@@ -50,6 +50,7 @@ object Inventory extends Controller {
 
 	implicit val resultWrite = new Writes[StoreAvailability] {
 		override def writes(o: StoreAvailability) = Json.obj(
+			"id" -> o.id,
 			"storeName" -> o.storeName,
 			"count" -> o.count
 		)
@@ -57,4 +58,4 @@ object Inventory extends Controller {
 
 }
 
-case class StoreAvailability(storeName: String, count: Int)
+case class StoreAvailability(id: Int, storeName: String, count: Int)

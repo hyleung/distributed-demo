@@ -3,13 +3,12 @@ package com.example.resource;
 import com.example.domain.ProductInfo;
 import com.example.service.ProductAvailabilityService;
 import com.example.service.ProductCatalogService;
+import com.example.service.StoreAvailabilityService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 
@@ -23,14 +22,17 @@ import java.util.NoSuchElementException;
 public class ProductInfoResource {
 	private final ProductCatalogService catalogService = new ProductCatalogService();
 	private final ProductAvailabilityService availabilityService = new ProductAvailabilityService();
+	private final StoreAvailabilityService storeAvailabilityService = new StoreAvailabilityService();
 
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response retrieveInfo(@PathParam("id") String id) {
+	public Response retrieveInfo(@PathParam("id") String id, @QueryParam("storeAvailability") boolean checkStoreAvailability) {
 		try {
 			ProductInfo productInfo = catalogService.retrieveProductInfo(id);
 			productInfo.setInStock(availabilityService.isProductAvailable(id));
+			if (checkStoreAvailability)
+				productInfo.setStoreAvailabilityList(storeAvailabilityService.retrieveStoreAvailability(id));
 			return Response
 					.ok(productInfo)
 					.build();
@@ -39,6 +41,11 @@ public class ProductInfoResource {
 					.status(Response.Status.NOT_FOUND)
 					.entity("Product not found")
 					.build();
+		} catch (IOException ioError) {
+			ioError.printStackTrace();
+			return Response
+						.serverError()
+						.build();
 		}
 	}
 
