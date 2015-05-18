@@ -17,9 +17,10 @@ class ApiSimulation extends Simulation{
 		.exec(http("Fetch product list")
 			.get("/api/catalog"))
 			.pause(1)
-		.exec(http("View product detail")
-			.get("/api/product/50"))
-			.pause(1)
+		.randomSwitch(
+			75.0 -> exec(http("Product detail").get("/api/product/50")),
+			25.0 -> exec(http("Product detail w/availability").get("/api/product/50?storeAvailability=true"))
+		).pause(1)
 
 	setUp(scn.inject(rampUsers(250) over (60 seconds)).protocols(httpConf))
 }
