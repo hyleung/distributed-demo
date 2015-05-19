@@ -24,6 +24,12 @@ public class ProductCatalogService {
 	}
 
 	public ProductInfo retrieveProductInfo(final String id) {
+		//fake some latency fetching results
+		try {
+			Thread.sleep(60);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		return Iterables.find(catalog, new Predicate<ProductInfo>() {
 			@Override
 			public boolean apply(ProductInfo input) {
