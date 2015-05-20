@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.command.RetrieveCatalogCommand;
 import com.example.database.ProductCatalogDb;
 import com.example.domain.ProductInfo;
 
@@ -18,8 +19,8 @@ public class ProductCatalogService {
 		return database.retrieveProductInfo(id);
 	}
 
-	public List<ProductInfo> fetchAll() {
-		return database.fetchAll();
+	public List<ProductInfo> fetchAll() throws Exception {
+		return new RetrieveCatalogCommand().run();
 	}
 
 }
