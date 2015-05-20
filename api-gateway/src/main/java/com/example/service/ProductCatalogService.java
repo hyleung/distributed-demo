@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.command.RetrieveCatalogCommand;
-import com.example.database.ProductCatalogDb;
+import com.example.command.catalog.RetrieveCatalogCommand;
+import com.example.command.catalog.RetrieveProductInfoCommand;
 import com.example.domain.ProductInfo;
 
 import java.util.List;
@@ -13,14 +13,14 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ProductCatalogService {
-	private ProductCatalogDb database = new ProductCatalogDb();
+
 
 	public ProductInfo retrieveProductInfo(final String id) {
-		return database.retrieveProductInfo(id);
+		return new RetrieveProductInfoCommand(id).execute();
 	}
 
-	public List<ProductInfo> fetchAll() throws Exception {
-		return new RetrieveCatalogCommand().run();
+	public List<ProductInfo> fetchAll() {
+		return new RetrieveCatalogCommand().execute();
 	}
 
 }
