@@ -1,12 +1,8 @@
 package com.example.service;
 
 
+import com.example.command.inventory.RetrieveProductAvailabilityCommand;
 import com.example.domain.ProductAvailability;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Response;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,12 +12,7 @@ import javax.ws.rs.core.Response;
  */
 public class ProductAvailabilityService {
 	public boolean isProductAvailable(String productId) {
-		Client client = ClientBuilder.newClient();
-		Invocation invocation = client.target("http://localhost:3000/api/availability/" + productId)
-				.request()
-				.buildGet();
-		Response response = invocation.invoke();
-		ProductAvailability availability = response.readEntity(ProductAvailability.class);
+		ProductAvailability availability = new RetrieveProductAvailabilityCommand(productId).execute();
 		return availability.isInStock();
 	}
 }

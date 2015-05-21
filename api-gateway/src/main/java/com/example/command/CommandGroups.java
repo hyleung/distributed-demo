@@ -1,4 +1,4 @@
-package com.example.command.catalog;
+package com.example.command;
 
 /**
  * Created with IntelliJ IDEA.
@@ -6,6 +6,7 @@ package com.example.command.catalog;
  * Time: 8:21 PM
  * To change this template use File | Settings | File Templates.
  */
-interface Constants {
-	String CATALOG_GROUP = "Catalog";
+public interface CommandGroups {
+	String CATALOG = "Catalog";
+	String INVENTORY = "Inventory";
 }

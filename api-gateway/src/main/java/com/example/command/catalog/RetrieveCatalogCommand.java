@@ -1,5 +1,6 @@
 package com.example.command.catalog;
 
+import com.example.command.CommandGroups;
 import com.example.database.ProductCatalogDb;
 import com.example.domain.ProductInfo;
 import com.netflix.hystrix.HystrixCommand;
@@ -17,7 +18,7 @@ public class RetrieveCatalogCommand extends HystrixCommand<List<ProductInfo>> {
 
 	private final ProductCatalogDb database = new ProductCatalogDb();
 	public RetrieveCatalogCommand() {
-		super(HystrixCommandGroupKey.Factory.asKey(Constants.CATALOG_GROUP));
+		super(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG));
 	}
 
 	@Override
