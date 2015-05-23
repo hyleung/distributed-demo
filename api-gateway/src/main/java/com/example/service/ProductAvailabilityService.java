@@ -13,10 +13,8 @@ import java.util.Optional;
  * To change this template use File | Settings | File Templates.
  */
 public class ProductAvailabilityService {
-	public boolean isProductAvailable(String productId) {
+	public Optional<Boolean> isProductAvailable(String productId) {
 		Optional<ProductAvailability> availability = new RetrieveProductAvailabilityCommand(productId).execute();
-		if (availability.isPresent() )
-			return availability.get().isInStock();
-		return false;
+		return availability.map(ProductAvailability::isInStock);
 	}
 }

@@ -9,6 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 /**
@@ -29,7 +30,10 @@ public class ProductInfoResource {
 	public Response retrieveInfo(@PathParam("id") String id, @QueryParam("storeAvailability") boolean checkStoreAvailability) {
 		try {
 			ProductInfo productInfo = catalogService.retrieveProductInfo(id);
-			productInfo.setInStock(availabilityService.isProductAvailable(id));
+			Optional<Boolean> productAvailable = availabilityService.isProductAvailable(id);
+			if (productAvailable.isPresent()) {
+				productInfo.setInStock(productAvailable.get());
+			}
 			if (checkStoreAvailability)
 				productInfo.setStoreAvailabilityList(storeAvailabilityService.retrieveStoreAvailability(id));
 			return Response
