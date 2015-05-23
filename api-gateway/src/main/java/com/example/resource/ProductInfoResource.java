@@ -8,7 +8,6 @@ import com.example.service.StoreAvailabilityService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 
@@ -41,11 +40,6 @@ public class ProductInfoResource {
 					.status(Response.Status.NOT_FOUND)
 					.entity("Product not found")
 					.build();
-		} catch (IOException ioError) {
-			ioError.printStackTrace();
-			return Response
-						.serverError()
-						.build();
 		}
 	}
 
