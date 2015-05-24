@@ -1,6 +1,7 @@
 package com.example.resource;
 
 import com.example.domain.ProductInfo;
+import com.example.domain.StoreAvailability;
 import com.example.service.ProductAvailabilityService;
 import com.example.service.ProductCatalogService;
 import com.example.service.StoreAvailabilityService;
@@ -8,6 +9,7 @@ import com.example.service.StoreAvailabilityService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -34,8 +36,11 @@ public class ProductInfoResource {
 			if (productAvailable.isPresent()) {
 				productInfo.setInStock(productAvailable.get());
 			}
-			if (checkStoreAvailability)
-				productInfo.setStoreAvailabilityList(storeAvailabilityService.retrieveStoreAvailability(id));
+			if (checkStoreAvailability) {
+				Optional<List<StoreAvailability>> storeAvailabilityOption = storeAvailabilityService.retrieveStoreAvailability(id);
+				if (storeAvailabilityOption.isPresent())
+					productInfo.setStoreAvailabilityList(storeAvailabilityOption.get());
+			}
 			return Response
 					.ok(productInfo)
 					.build();
