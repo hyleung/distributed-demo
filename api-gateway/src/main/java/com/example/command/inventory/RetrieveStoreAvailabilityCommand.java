@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -23,7 +24,9 @@ import java.util.Optional;
 public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<List<StoreAvailability>>> {
 	private final String productId;
 	public RetrieveStoreAvailabilityCommand(String productId) {
-		super(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY));
+		super(Setter
+				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
+				.andCommandKey(HystrixCommandKey.Factory.asKey("Store Availability")));
 		this.productId = productId;
 	}
 
@@ -37,7 +40,8 @@ public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<Li
 		String json  = response.readEntity(String.class);
 		ObjectMapper mapper = new ObjectMapper();
 
-		return Optional.of(mapper.readValue(json, new TypeReference<List<StoreAvailability>>() {}));
+		return Optional.of(mapper.readValue(json, new TypeReference<List<StoreAvailability>>() {
+		}));
 	}
 
 	@Override

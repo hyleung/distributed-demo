@@ -4,6 +4,7 @@ import com.example.command.CommandGroups;
 import com.example.domain.ProductAvailability;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -20,7 +21,9 @@ import java.util.Optional;
 public class RetrieveProductAvailabilityCommand extends HystrixCommand<Optional<ProductAvailability>> {
 	private final String productId;
 	public RetrieveProductAvailabilityCommand(String productId) {
-		super(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY));
+		super(Setter
+				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
+				.andCommandKey(HystrixCommandKey.Factory.asKey("Product Availability")));
 		this.productId = productId;
 	}
 

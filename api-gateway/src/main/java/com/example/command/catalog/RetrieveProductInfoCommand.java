@@ -5,6 +5,7 @@ import com.example.database.ProductCatalogDb;
 import com.example.domain.ProductInfo;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,9 @@ public class RetrieveProductInfoCommand extends HystrixCommand<ProductInfo> {
 	private final ProductCatalogDb database = new ProductCatalogDb();
 	private final String id;
 	public RetrieveProductInfoCommand(String id) {
-		super(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG));
+		super(Setter
+				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG))
+				.andCommandKey(HystrixCommandKey.Factory.asKey("Product Info")));
 		this.id= id;
 	}
 
