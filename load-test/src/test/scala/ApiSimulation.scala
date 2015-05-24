@@ -2,6 +2,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.util.Random
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,12 +22,12 @@ class ApiSimulation extends Simulation {
 		.randomSwitch(
 			75.0 -> repeat(3) {
 				exec(http("Product detail")
-					.get("/api/product/50"))
+					.get(s"/api/product/${Random.nextInt(100)}"))
 					.pause(1)
 			},
 			25.0 -> repeat(3) {
 				exec(http("Product detail w/availability")
-					.get("/api/product/50?storeAvailability=true"))
+					.get(s"/api/product/${Random.nextInt(100)}?storeAvailability=true"))
 					.pause(1)
 			}
 		)
