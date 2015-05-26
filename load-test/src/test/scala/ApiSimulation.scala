@@ -33,6 +33,6 @@ class ApiSimulation extends Simulation {
 		)
 
 	setUp(scn.inject(
-		rampUsers(100) over (60 seconds)
+		rampUsers(250) over (120 seconds)
 	).protocols(httpConf))
 }

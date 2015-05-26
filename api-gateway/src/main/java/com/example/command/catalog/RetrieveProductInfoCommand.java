@@ -27,4 +27,9 @@ public class RetrieveProductInfoCommand extends HystrixCommand<ProductInfo> {
 	protected ProductInfo run() throws Exception {
 		return database.retrieveProductInfo(id);
 	}
+
+	@Override
+	protected String getCacheKey() {
+		return this.id;
+	}
 }

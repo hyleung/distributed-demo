@@ -5,6 +5,7 @@ import com.example.domain.StoreAvailability;
 import com.example.service.ProductAvailabilityService;
 import com.example.service.ProductCatalogService;
 import com.example.service.StoreAvailabilityService;
+import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +31,8 @@ public class ProductInfoResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response retrieveInfo(@PathParam("id") String id, @QueryParam("storeAvailability") boolean checkStoreAvailability) {
+		//init the Hystrix context (so that we can use request cache)
+		HystrixRequestContext requestContext = HystrixRequestContext.initializeContext();
 		try {
 			ProductInfo productInfo = catalogService.retrieveProductInfo(id);
 			Optional<Boolean> productAvailable = availabilityService.isProductAvailable(id);
@@ -49,6 +52,8 @@ public class ProductInfoResource {
 					.status(Response.Status.NOT_FOUND)
 					.entity("Product not found")
 					.build();
+		} finally {
+			requestContext.shutdown();
 		}
 	}
 
