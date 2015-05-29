@@ -6,7 +6,7 @@ package com.example.domain;
  * Time: 6:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ProductAvailability {
+public class ProductInventory {
 	private int count;
 	private String id;
 	private boolean inStock;

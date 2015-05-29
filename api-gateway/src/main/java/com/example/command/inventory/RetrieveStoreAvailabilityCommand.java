@@ -23,17 +23,22 @@ import java.util.Optional;
  */
 public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<List<StoreAvailability>>> {
 	private final String productId;
+	private final String serviceHost;
+	private final int servicePort;
 	public RetrieveStoreAvailabilityCommand(String productId) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
 				.andCommandKey(HystrixCommandKey.Factory.asKey("Store Availability")));
 		this.productId = productId;
+		this.serviceHost = System.getProperty("availability.service.host","http://localhost");
+		this.servicePort = Integer.parseInt(System.getProperty("availability.service.port","9000"));
 	}
 
 	@Override
 	protected Optional<List<StoreAvailability>> run() throws Exception {
 		Client client = ClientBuilder.newClient();
-		Invocation invocation = client.target("http://localhost:9000/api/inventory/" + productId)
+		Invocation invocation = client
+				.target(String.format("%s:%d/api/inventory/%s", serviceHost, servicePort, productId))
 				.request()
 				.buildGet();
 		Response response = invocation.invoke();

@@ -2,7 +2,7 @@ package com.example.resource;
 
 import com.example.domain.ProductInfo;
 import com.example.domain.StoreAvailability;
-import com.example.service.ProductAvailabilityService;
+import com.example.service.ProductInventoryService;
 import com.example.service.ProductCatalogService;
 import com.example.service.StoreAvailabilityService;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Path("/product")
 public class ProductInfoResource {
 	private final ProductCatalogService catalogService = new ProductCatalogService();
-	private final ProductAvailabilityService availabilityService = new ProductAvailabilityService();
+	private final ProductInventoryService availabilityService = new ProductInventoryService();
 	private final StoreAvailabilityService storeAvailabilityService = new StoreAvailabilityService();
 
 	@GET

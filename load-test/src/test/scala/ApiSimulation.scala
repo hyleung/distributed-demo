@@ -22,18 +22,18 @@ class ApiSimulation extends Simulation {
 		.randomSwitch(
 			75.0 -> repeat(3) {
 				exec(http("Product detail")
-					.get(s"/api/product/${randomId}"))
+					.get(s"/api/product/$randomId"))
 					.pause(1)
 			},
 			25.0 -> repeat(3) {
 				exec(http("Product detail w/availability")
-					.get(s"/api/product/${randomId}?storeAvailability=true"))
+					.get(s"/api/product/$randomId?storeAvailability=true"))
 					.pause(1)
 			}
 		)
 
 	setUp(scn.inject(
-		rampUsers(250) over (120 seconds)
+		rampUsers(900) over (5 minutes)
 	).protocols(httpConf))
 
 	def randomId = {
