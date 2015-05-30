@@ -19,10 +19,27 @@ dependencies {
     compile 'com.google.guava:guava:18.0'
     compile 'com.netflix.hystrix:hystrix-core:1.4.7'
     compile 'com.netflix.hystrix:hystrix-metrics-event-stream:1.4.7'
+    compile 'org.eclipse.jetty:jetty-server:9.3.0.RC1'
+    compile 'org.eclipse.jetty:jetty-http:9.3.0.RC1'
+    compile 'org.eclipse.jetty:jetty-servlet:9.3.0.RC1'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    runtime 'org.slf4j:slf4j-simple:1.7.12'
     testCompile "junit:junit:4.11"
 }
 
 jettyRun.contextPath = 'api'
+jettyRun.httpPort = 8080
 
 sourceCompatibility=1.8
 targetCompatibility=1.8
+
+jar {
+    archiveName = "api-gateway.jar"
+    from configurations.runtime.collect {
+        zipTree(it)
+    }
+
+    manifest {
+        attributes 'Main-Class':'com.example.server.App'
+    }
+}
