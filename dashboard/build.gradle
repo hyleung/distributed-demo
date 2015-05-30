@@ -1,6 +1,6 @@
 apply plugin: 'war'
 apply plugin: 'jetty'
-
+apply plugin: 'java'
 repositories {
     mavenCentral()
 }
@@ -10,8 +10,33 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.2.1'
     compile 'log4j:log4j:1.2.17'
     compile 'org.slf4j:slf4j-log4j12:1.7.0'
+    compile 'org.eclipse.jetty:jetty-server:9.3.0.RC1'
+    compile 'org.eclipse.jetty:jetty-http:9.3.0.RC1'
+    compile 'org.eclipse.jetty:jetty-servlet:9.3.0.RC1'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    runtime 'org.slf4j:slf4j-simple:1.7.12'
 }
 
 jettyRun {
         httpPort = 7979
 }
+
+jar {
+    archiveName = "hystrix-dashboard.jar"
+    from configurations.runtime.collect {
+        zipTree(it)
+    }
+
+    manifest {
+        attributes 'Main-Class':'com.netflix.hystrix.dashboard.App'
+    }
+}
+
+task copyStaticContent(type:Copy) {
+    from 'src/main/webapp'
+    into 'build/resources/main/webapp'
+}
+
+processResources.dependsOn("copyStaticContent")
+
+
