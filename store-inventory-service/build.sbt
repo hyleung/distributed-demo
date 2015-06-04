@@ -17,8 +17,9 @@ libraryDependencies ++= Seq(
   ws
 )
 
-dockerBaseImage := "java:8"
+dockerBaseImage := "hyleung/busybox-java"
 
 dockerExposedPorts := Seq(9000)
 
 maintainer := "H.Y.Leung <hy.leung@gmail.com>"
+
