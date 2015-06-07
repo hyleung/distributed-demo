@@ -1,6 +1,6 @@
 import NativePackagerKeys._
 
-name := """inventory-service"""
+name := """store-inventory"""
 
 version := "1.0-SNAPSHOT"
 
@@ -22,4 +22,6 @@ dockerBaseImage := "hyleung/busybox-java"
 dockerExposedPorts := Seq(9000)
 
 maintainer := "H.Y.Leung <hy.leung@gmail.com>"
+
+version in Docker := "latest"
 
