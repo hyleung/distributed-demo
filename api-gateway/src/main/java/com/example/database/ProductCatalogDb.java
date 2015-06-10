@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang.SerializationUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,12 +31,9 @@ public class ProductCatalogDb {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return Iterables.find(catalog, new Predicate<ProductInfo>() {
-			@Override
-			public boolean apply(ProductInfo input) {
-				return input.getId().equals(id);
-			}
-		});
+
+		ProductInfo productInfo = Iterables.find(catalog, input -> input.getId().equals(id));
+		return (ProductInfo)SerializationUtils.clone(productInfo);
 	}
 
 	public List<ProductInfo> fetchAll() {

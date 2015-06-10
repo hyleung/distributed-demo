@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @SuppressWarnings("unused")
-public class ProductInfo {
+public class ProductInfo implements Serializable {
 
 	public ProductInfo() {
 	}
@@ -72,4 +73,5 @@ public class ProductInfo {
 	public void setStoreAvailabilityList(List<StoreAvailability> storeAvailabilityList) {
 		this.storeAvailabilityList = storeAvailabilityList;
 	}
+
 }

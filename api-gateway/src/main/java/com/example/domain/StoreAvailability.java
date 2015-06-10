@@ -1,12 +1,14 @@
 package com.example.domain;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * Date: 15-05-16
  * Time: 7:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StoreAvailability {
+public class StoreAvailability implements Serializable{
 	private int id;
 	private String storeName;
 	private int count;
