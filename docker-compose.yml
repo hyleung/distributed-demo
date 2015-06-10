@@ -1,0 +1,30 @@
+storeinventory:
+    image: store-inventory
+    expose:
+        - "9000"
+    ports:
+        - "9000:9000" 
+inventory:
+    image: inventory-service
+    expose:
+        - "3000"
+    ports:
+        - "3000:3000" 
+gateway:
+    image: api-gateway
+    environment:
+        STORE_INVENTORY_HOST: http://storeinventory
+        INVENTORY_HOST: http://inventory
+    links:
+        - storeinventory
+        - inventory
+    ports:
+        - "8080:8080"
+        - "9999:9999"
+dashboard:
+    image: hystrix-dashboard
+    links:
+        - gateway
+    ports:
+        - "7979:7979"
+

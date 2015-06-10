@@ -5,6 +5,8 @@ import com.example.domain.ProductInventory;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -22,6 +24,7 @@ public class RetrieveProductInventoryCommand extends HystrixCommand<Optional<Pro
 	private final String productId;
 	private final String serviceHost;
 	private final int servicePort;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RetrieveProductInventoryCommand.class);
 	public RetrieveProductInventoryCommand(String productId) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
@@ -29,14 +32,15 @@ public class RetrieveProductInventoryCommand extends HystrixCommand<Optional<Pro
 		this.productId = productId;
 		this.serviceHost = System.getProperty("inventory.service.host","http://localhost");
 		this.servicePort = Integer.parseInt(System.getProperty("inventory.service.port","3000"));
-
 	}
 
 	@Override
 	protected Optional<ProductInventory> run() throws Exception {
 		Client client = ClientBuilder.newClient();
+		String uri = String.format("%s:%d/api/availability/%s", serviceHost, servicePort, productId);
+		LOGGER.info(uri);
 		Invocation invocation =
-				client.target(String.format("%s:%d/api/availability/%s", serviceHost, servicePort, productId))
+				client.target(uri)
 				.request()
 				.buildGet();
 		Response response = invocation.invoke();
@@ -46,6 +50,7 @@ public class RetrieveProductInventoryCommand extends HystrixCommand<Optional<Pro
 
 	@Override
 	protected Optional<ProductInventory> getFallback() {
+		LOGGER.warn("Executing fallback");
 		return Optional.empty();
 	}
 }

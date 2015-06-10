@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -25,6 +27,7 @@ public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<Li
 	private final String productId;
 	private final String serviceHost;
 	private final int servicePort;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RetrieveStoreAvailabilityCommand.class);
 	public RetrieveStoreAvailabilityCommand(String productId) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
@@ -37,8 +40,10 @@ public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<Li
 	@Override
 	protected Optional<List<StoreAvailability>> run() throws Exception {
 		Client client = ClientBuilder.newClient();
+		String uri = String.format("%s:%d/api/inventory/%s", serviceHost, servicePort, productId);
+		LOGGER.info(uri);
 		Invocation invocation = client
-				.target(String.format("%s:%d/api/inventory/%s", serviceHost, servicePort, productId))
+				.target(uri)
 				.request()
 				.buildGet();
 		Response response = invocation.invoke();
@@ -51,6 +56,7 @@ public class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<Li
 
 	@Override
 	protected Optional<List<StoreAvailability>> getFallback() {
+		LOGGER.warn("Executing fallback");
 		return Optional.empty();
 	}
 }

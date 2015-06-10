@@ -6,6 +6,8 @@ import com.example.service.ProductInventoryService;
 import com.example.service.ProductCatalogService;
 import com.example.service.StoreAvailabilityService;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +28,7 @@ public class ProductInfoResource {
 	private final ProductCatalogService catalogService = new ProductCatalogService();
 	private final ProductInventoryService availabilityService = new ProductInventoryService();
 	private final StoreAvailabilityService storeAvailabilityService = new StoreAvailabilityService();
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductInfoResource.class);
 
 	@GET
 	@Path("{id}")
@@ -41,8 +44,9 @@ public class ProductInfoResource {
 			}
 			if (checkStoreAvailability) {
 				Optional<List<StoreAvailability>> storeAvailabilityOption = storeAvailabilityService.retrieveStoreAvailability(id);
-				if (storeAvailabilityOption.isPresent())
+				if (storeAvailabilityOption.isPresent()) {
 					productInfo.setStoreAvailabilityList(storeAvailabilityOption.get());
+				}
 			}
 			return Response
 					.ok(productInfo)
