@@ -20,7 +20,6 @@ gateway:
         - inventory
     ports:
         - "8080:8080"
-        - "9999:9999"
 dashboard:
     image: hystrix-dashboard
     links:
