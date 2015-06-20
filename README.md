@@ -1,5 +1,53 @@
 #Distributed Demo
 
+##Getting Started
+
+This demo consists of 4 web applications:
+
+- an "API Gateway" (Java - using [Jetty](http://jetty.codehaus.org/) with [Jersey](http://jersey.java.net/))
+- an inventory service (Clojure w/[Luminus](http://www.luminusweb.net))
+- a "in-store" inventory service (Scala - using [Play Framework](http://playframework.com/))
+- a [Hystrix](https://github.com/Netflix/Hystrix) Dashboard (Jetty)
+
+###Building and running the web apps
+
+####Start the API Gateway
+
+    cd api-gateway
+    gradle jettyRun
+
+The service will start by default on port 8080.
+
+####Start the inventory service
+
+    cd inventory-service
+    lein ring server
+
+The service will start by default on port 3000.
+
+####Start the "in-store" inventory service
+
+    cd store-inventory-service
+    sbt run
+
+The service will start by default on port 9000.
+
+####Start the Hystrix dashboard
+
+    cd dashboard
+    gradle jettyRun
+
+The dashboard should be available on port 7979.
+
+###Buidling and running using Docker
+
+    ./docker_build.sh
+    docker-compose up
+
+The ports (8080, 9000, 3000, 7979) should all be published.
+
+##TL;DR
+
 The general gist of this demo…we have a commerce-y website. Displays the product listings and product details (price, description, etc.)
 In addition to this basic information, we also surface information regarding the avaiability of the product - whether the product is currently
 "In Stock" as well as whether the product is availabile in local ("bricks-and-mortar") stores.
@@ -25,9 +73,5 @@ Catalog scenario - we want the user to be able to view product info (and Add-To-
 ![Product Detail](images/product_detail.png)
 
 ##Hystrix
-
-//ToDo
-
-##Getting Started
 
 //ToDo
