@@ -4,12 +4,16 @@ storeinventory:
         - "9000"
     ports:
         - "9000:9000" 
+    labels:
+        com.demo.description: "Store Inventory Service"
 inventory:
     image: inventory-service
     expose:
         - "3000"
     ports:
         - "3000:3000" 
+    labels:
+        com.demo.description: "Inventory Service"
 gateway:
     image: api-gateway
     environment:
@@ -20,10 +24,14 @@ gateway:
         - inventory
     ports:
         - "8080:8080"
+    labels:
+        com.demo.description: "API Gateway"
 dashboard:
     image: hystrix-dashboard
     links:
         - gateway
     ports:
         - "7979:7979"
+    labels:
+        com.demo.description: "Hystrix Dashboard"
 
