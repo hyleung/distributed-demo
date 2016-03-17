@@ -14,7 +14,7 @@ This demo consists of 4 web applications:
 ####Start the API Gateway
 
     cd api-gateway
-    gradle jettyRun
+    gradle run 
 
 The service will start by default on port 8080.
 
