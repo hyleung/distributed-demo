@@ -52,7 +52,7 @@ public class ProductCatalogDb {
 			return catalog.productList;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new ArrayList<ProductInfo>();
+			return new ArrayList<>();
 		}
 	}
 

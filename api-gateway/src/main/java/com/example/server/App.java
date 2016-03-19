@@ -1,5 +1,10 @@
 package com.example.server;
 
+import com.example.domain.ProductInventory;
+import com.example.domain.StoreAvailability;
+import com.example.service.ProductCatalogService;
+import com.example.service.ProductInventoryService;
+import com.example.service.StoreAvailabilityService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -34,7 +39,9 @@ public class App {
         modules.add(new AbstractModule() {
             @Override
             protected void configure() {
-                // ...
+                bind(ProductCatalogService.class).asEagerSingleton();
+                bind(ProductInventoryService.class).asEagerSingleton();
+                bind(StoreAvailabilityService.class).asEagerSingleton();
             }
         });
 

@@ -5,6 +5,7 @@ import com.example.domain.StoreAvailability;
 import com.example.service.ProductInventoryService;
 import com.example.service.ProductCatalogService;
 import com.example.service.StoreAvailabilityService;
+import com.google.inject.Inject;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,19 @@ import java.util.Optional;
  */
 @Path("/product")
 public class ProductInfoResource {
-	private final ProductCatalogService catalogService = new ProductCatalogService();
-	private final ProductInventoryService availabilityService = new ProductInventoryService();
-	private final StoreAvailabilityService storeAvailabilityService = new StoreAvailabilityService();
+	private final ProductCatalogService catalogService;
+	private final ProductInventoryService availabilityService;
+	private final StoreAvailabilityService storeAvailabilityService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductInfoResource.class);
+
+	@Inject
+	public ProductInfoResource(final ProductCatalogService catalogService,
+							   final ProductInventoryService availabilityService,
+							   final StoreAvailabilityService storeAvailabilityService) {
+		this.catalogService = catalogService;
+		this.availabilityService = availabilityService;
+		this.storeAvailabilityService = storeAvailabilityService;
+	}
 
 	@GET
 	@Path("{id}")

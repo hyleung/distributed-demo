@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * To change this template use File | Settings | File Templates.
  */
 public class ProductInventoryService {
-	public Optional<Boolean> isProductAvailable(String productId) {
+	public Optional<Boolean> isProductAvailable(final String productId) {
 		//for some unknown reason, we fetch the product info (testing request caching)
 		ProductInfo productInfo = new RetrieveProductInfoCommand(productId).execute();
 		Logger.getAnonymousLogger().log(Level.FINE,"Got info for: " + productInfo.getName());

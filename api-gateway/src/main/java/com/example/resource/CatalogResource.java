@@ -2,6 +2,7 @@ package com.example.resource;
 
 import com.example.domain.ProductInfo;
 import com.example.service.ProductCatalogService;
+import com.google.inject.Inject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,7 +18,12 @@ import java.util.List;
  */
 @Path("/catalog")
 public class CatalogResource {
-	private final ProductCatalogService catalogService = new ProductCatalogService();
+	private final ProductCatalogService catalogService;
+
+	@Inject
+	public CatalogResource(final ProductCatalogService catalogService) {
+		this.catalogService = catalogService;
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
