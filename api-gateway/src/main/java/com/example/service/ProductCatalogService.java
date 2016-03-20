@@ -1,9 +1,9 @@
 package com.example.service;
 
-import com.example.command.catalog.RetrieveCatalogCommand;
-import com.example.command.catalog.RetrieveProductInfoCommand;
+import com.example.command.catalog.CatalogCommandFactory;
 import com.example.domain.ProductInfo;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -14,13 +14,21 @@ import java.util.List;
  */
 public class ProductCatalogService {
 
+    private final CatalogCommandFactory commandFactory;
 
-	public ProductInfo retrieveProductInfo(final String id) {
-		return new RetrieveProductInfoCommand(id).execute();
+    @Inject
+    public ProductCatalogService(CatalogCommandFactory commandFactory) {
+        this.commandFactory = commandFactory;
+    }
+
+    public ProductInfo retrieveProductInfo(final String id) {
+		return commandFactory
+                .retrieveProductInfoCommand(id)
+                .execute();
 	}
 
 	public List<ProductInfo> fetchAll() {
-		return new RetrieveCatalogCommand().execute();
+		return commandFactory.retriveCatalogCommand().execute();
 	}
 
 }

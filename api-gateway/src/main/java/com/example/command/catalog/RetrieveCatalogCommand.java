@@ -15,13 +15,14 @@ import java.util.List;
  * Time: 6:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RetrieveCatalogCommand extends HystrixCommand<List<ProductInfo>> {
+class RetrieveCatalogCommand extends HystrixCommand<List<ProductInfo>> {
 
-	private final ProductCatalogDb database = new ProductCatalogDb();
-	public RetrieveCatalogCommand() {
+	private final ProductCatalogDb database;
+	public RetrieveCatalogCommand(final ProductCatalogDb database) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG))
 				.andCommandKey(HystrixCommandKey.Factory.asKey("Retrieve Catalog")));
+		this.database = database;
 	}
 
 	@Override

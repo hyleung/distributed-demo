@@ -13,13 +13,15 @@ import com.netflix.hystrix.HystrixCommandKey;
  * Time: 8:22 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RetrieveProductInfoCommand extends HystrixCommand<ProductInfo> {
-	private final ProductCatalogDb database = new ProductCatalogDb();
+class RetrieveProductInfoCommand extends HystrixCommand<ProductInfo> {
+	private final ProductCatalogDb database;
+
 	private final String id;
-	public RetrieveProductInfoCommand(String id) {
+	public RetrieveProductInfoCommand(final ProductCatalogDb database, final String id) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG))
 				.andCommandKey(HystrixCommandKey.Factory.asKey("Product Info")));
+		this.database = database;
 		this.id= id;
 	}
 

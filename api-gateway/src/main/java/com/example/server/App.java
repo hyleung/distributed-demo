@@ -1,5 +1,7 @@
 package com.example.server;
 
+import com.example.command.catalog.CatalogCommandFactory;
+import com.example.database.ProductCatalogDb;
 import com.example.domain.ProductInventory;
 import com.example.domain.StoreAvailability;
 import com.example.service.ProductCatalogService;
@@ -42,6 +44,8 @@ public class App {
                 bind(ProductCatalogService.class).asEagerSingleton();
                 bind(ProductInventoryService.class).asEagerSingleton();
                 bind(StoreAvailabilityService.class).asEagerSingleton();
+                bind(ProductCatalogDb.class).asEagerSingleton();
+                bind(CatalogCommandFactory.class).asEagerSingleton();
             }
         });
 
