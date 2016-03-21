@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.command.catalog.CatalogCommandFactory;
-import com.example.command.inventory.RetrieveStoreAvailabilityCommand;
+import com.example.command.inventory.InventoryCommandFactory;
 import com.example.domain.ProductInfo;
 import com.example.domain.StoreAvailability;
 
@@ -18,17 +18,19 @@ import java.util.logging.Logger;
  * To change this template use File | Settings | File Templates.
  */
 public class StoreAvailabilityService {
-	private final CatalogCommandFactory catalogCommandFactory;
+    private final CatalogCommandFactory catalogCommandFactory;
+    private final InventoryCommandFactory inventoryCommandFactory;
 
-	@Inject
-	public StoreAvailabilityService(CatalogCommandFactory catalogCommandFactory) {
-		this.catalogCommandFactory = catalogCommandFactory;
-	}
+    @Inject
+    public StoreAvailabilityService(CatalogCommandFactory catalogCommandFactory, InventoryCommandFactory inventoryCommandFactory) {
+        this.catalogCommandFactory = catalogCommandFactory;
+        this.inventoryCommandFactory = inventoryCommandFactory;
+    }
 
-	public Optional<List<StoreAvailability>> retrieveStoreAvailability(final String productId) {
-		//for some unknown reason, we fetch the product info (testing request caching)
-		ProductInfo productInfo = catalogCommandFactory.retrieveProductInfoCommand(productId).execute();
-		Logger.getAnonymousLogger().log(Level.FINE,"Got info for: " + productInfo.getName());
-		return new RetrieveStoreAvailabilityCommand(productId).execute();
-	}
+    public Optional<List<StoreAvailability>> retrieveStoreAvailability(final String productId) {
+        //for some unknown reason, we fetch the product info (testing request caching)
+        ProductInfo productInfo = catalogCommandFactory.retrieveProductInfoCommand(productId).execute();
+        Logger.getAnonymousLogger().log(Level.FINE, "Got info for: " + productInfo.getName());
+        return inventoryCommandFactory.retrieveStoreAvailability(productId).execute();
+    }
 }

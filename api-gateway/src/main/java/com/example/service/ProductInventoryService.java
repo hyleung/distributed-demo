@@ -2,7 +2,7 @@ package com.example.service;
 
 
 import com.example.command.catalog.CatalogCommandFactory;
-import com.example.command.inventory.RetrieveProductInventoryCommand;
+import com.example.command.inventory.InventoryCommandFactory;
 import com.example.domain.ProductInfo;
 import com.example.domain.ProductInventory;
 
@@ -19,10 +19,12 @@ import java.util.logging.Logger;
  */
 public class ProductInventoryService {
 	private final CatalogCommandFactory catalogCommandFactory;
+	private final InventoryCommandFactory inventoryCommandFactory;
 
 	@Inject
-	public ProductInventoryService(final CatalogCommandFactory catalogCommandFactory) {
+	public ProductInventoryService(CatalogCommandFactory catalogCommandFactory, InventoryCommandFactory inventoryCommandFactory) {
 		this.catalogCommandFactory = catalogCommandFactory;
+		this.inventoryCommandFactory = inventoryCommandFactory;
 	}
 
 	public Optional<Boolean> isProductAvailable(final String productId) {
@@ -32,7 +34,7 @@ public class ProductInventoryService {
 											.execute();
 		Logger.getAnonymousLogger().log(Level.FINE,"Got info for: " + productInfo.getName());
 
-		Optional<ProductInventory> availability = new RetrieveProductInventoryCommand(productId).execute();
+		Optional<ProductInventory> availability = inventoryCommandFactory.retrieveProductInventory(productId).execute();
 		return availability.map(ProductInventory::isInStock);
 	}
 }

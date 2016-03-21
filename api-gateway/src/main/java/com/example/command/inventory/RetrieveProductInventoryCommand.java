@@ -20,7 +20,7 @@ import java.util.Optional;
  * Time: 8:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RetrieveProductInventoryCommand extends HystrixCommand<Optional<ProductInventory>> {
+class RetrieveProductInventoryCommand extends HystrixCommand<Optional<ProductInventory>> {
 	private final String productId;
 	private final String serviceHost;
 	private final int servicePort;
