@@ -8,6 +8,9 @@ import com.example.domain.StoreAvailability;
 import com.example.service.ProductCatalogService;
 import com.example.service.ProductInventoryService;
 import com.example.service.StoreAvailabilityService;
+import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.ServerTracer;
+import com.github.kristofa.brave.SpanAndEndpoint;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -37,8 +40,9 @@ public class App {
 	public static void main(String[] args) {
         List<Module> modules = new ArrayList<>();
 
-        modules.add(new JerseyGuiceModule("__HK2_Generated_0"));
+		modules.add(new JerseyGuiceModule("__HK2_Generated_0"));
         modules.add(new ServletModule());
+		modules.add(new BraveTraceModule());
         modules.add(new AbstractModule() {
             @Override
             protected void configure() {
@@ -68,7 +72,7 @@ public class App {
 
 		jerseyServlet.setInitParameter(
 				"jersey.config.server.provider.packages",
-				"com.example"
+				"com.example, com.github.kristofa.brave.jaxrs2"
 		);
 
 		ServletHolder hystrixStreamServlet = context.addServlet(HystrixMetricsStreamServlet.class, "/hystrix.stream/*");
