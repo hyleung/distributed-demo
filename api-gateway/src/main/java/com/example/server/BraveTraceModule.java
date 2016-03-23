@@ -6,30 +6,19 @@ import com.github.kristofa.brave.http.SpanNameProvider;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-import java.util.Random;
-
 /**
  * Created by hyleung on 2016-03-21.
  */
 public class BraveTraceModule extends AbstractModule {
+
     @Provides
-    public SpanCollector spanCollector() {
-        return new LoggingSpanCollector();
+    public Brave brave() {
+        return new Brave.Builder("brave-jersey-2").build();
     }
 
     @Provides
-    public ServerTracer getServerTracer(final SpanCollector spanCollector) {
-        return ServerTracer.builder()
-                .state(new ThreadLocalServerClientAndLocalSpanState(0,0,"foo"))
-                .traceSampler(Sampler.create(1.0f))
-                .randomGenerator(new Random())
-                .spanCollector(spanCollector).build();
-    }
-
-    @Provides
-    public Brave brave(final SpanCollector spanCollector) {
-        Brave.Builder builder = new Brave.Builder("brave-jersey2");
-        return builder.spanCollector(spanCollector).build();
+    public ServerTracer getServerTracer(final Brave brave) {
+        return brave.serverTracer();
     }
 
     @Provides
