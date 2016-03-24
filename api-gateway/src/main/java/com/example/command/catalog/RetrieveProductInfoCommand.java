@@ -3,6 +3,7 @@ package com.example.command.catalog;
 import com.example.command.CommandGroups;
 import com.example.database.ProductCatalogDb;
 import com.example.domain.ProductInfo;
+import com.github.kristofa.brave.LocalTracer;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
@@ -15,19 +16,23 @@ import com.netflix.hystrix.HystrixCommandKey;
  */
 class RetrieveProductInfoCommand extends HystrixCommand<ProductInfo> {
 	private final ProductCatalogDb database;
-
 	private final String id;
-	public RetrieveProductInfoCommand(final ProductCatalogDb database, final String id) {
+	private final LocalTracer localTracer;
+	public RetrieveProductInfoCommand(final ProductCatalogDb database, final String id, final LocalTracer localTracer) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.CATALOG))
 				.andCommandKey(HystrixCommandKey.Factory.asKey("Product Info")));
 		this.database = database;
 		this.id= id;
+		this.localTracer = localTracer;
 	}
 
 	@Override
 	protected ProductInfo run() throws Exception {
-		return database.retrieveProductInfo(id);
+		localTracer.startNewSpan("ProductCatalogDb","retrieveProductInfo");
+		ProductInfo result = database.retrieveProductInfo(id);
+		localTracer.finishSpan();
+		return result;
 	}
 
 	@Override

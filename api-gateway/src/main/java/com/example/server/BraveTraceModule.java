@@ -22,6 +22,11 @@ public class BraveTraceModule extends AbstractModule {
     }
 
     @Provides
+    public LocalTracer localTracer(final Brave brave) {
+        return brave.localTracer();
+    }
+
+    @Provides
     public ServerResponseInterceptor serverResponseInterceptor(final ServerTracer tracer) {
         return new ServerResponseInterceptor(tracer);
     }
