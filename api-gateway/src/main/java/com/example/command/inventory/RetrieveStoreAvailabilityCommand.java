@@ -10,9 +10,7 @@ import com.netflix.hystrix.HystrixCommandKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +25,18 @@ class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<List<Stor
 	private final String productId;
 	private final String serviceHost;
 	private final int servicePort;
+	private final ClientRequestFilter clientRequestFilter;
+	private final ClientResponseFilter clientResponseFilter;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RetrieveStoreAvailabilityCommand.class);
-	public RetrieveStoreAvailabilityCommand(String productId) {
+	public RetrieveStoreAvailabilityCommand(final String productId,
+											final ClientRequestFilter requestFilter,
+											final ClientResponseFilter responseFilter) {
 		super(Setter
 				.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CommandGroups.INVENTORY))
 				.andCommandKey(HystrixCommandKey.Factory.asKey("Store Availability")));
 		this.productId = productId;
+		this.clientRequestFilter = requestFilter;
+		this.clientResponseFilter = responseFilter;
 		this.serviceHost = System.getProperty("availability.service.host","http://localhost");
 		this.servicePort = Integer.parseInt(System.getProperty("availability.service.port","9000"));
 	}
@@ -40,6 +44,8 @@ class RetrieveStoreAvailabilityCommand extends HystrixCommand<Optional<List<Stor
 	@Override
 	protected Optional<List<StoreAvailability>> run() throws Exception {
 		Client client = ClientBuilder.newClient();
+		client.register(clientRequestFilter);
+		client.register(clientResponseFilter);
 		String uri = String.format("%s:%d/api/inventory/%s", serviceHost, servicePort, productId);
 		LOGGER.info(uri);
 		Invocation invocation = client
