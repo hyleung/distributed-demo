@@ -7,6 +7,7 @@ import com.github.kristofa.brave.http.SpanNameProvider;
 import com.github.kristofa.brave.http.StringServiceNameProvider;
 import com.github.kristofa.brave.jaxrs2.BraveClientRequestFilter;
 import com.github.kristofa.brave.jaxrs2.BraveClientResponseFilter;
+import com.github.kristofa.brave.scribe.ScribeSpanCollector;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -19,8 +20,15 @@ import javax.ws.rs.client.ClientResponseFilter;
 public class BraveTraceModule extends AbstractModule {
 
     @Provides
-    public Brave brave() {
-        return new Brave.Builder("brave-jersey-2").build();
+    public Brave brave(final Config config) {
+        Brave.Builder builder = new Brave
+                .Builder("api-gateway");
+        if (config.scribeHost().isPresent() && config.scribePort().isPresent()) {
+            builder.spanCollector(new ScribeSpanCollector(config.scribeHost().get(),
+                    config.scribePort().get()));
+        }
+        return builder
+                .build();
     }
 
     @Provides
@@ -65,7 +73,8 @@ public class BraveTraceModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ClientRequestFilter.class).to(BraveClientRequestFilter.class).asEagerSingleton();
-        bind(ClientResponseFilter.class).to(BraveClientResponseFilter.class).asEagerSingleton();
+        bind(ClientRequestFilter.class).to(BraveClientRequestFilter.class);
+        bind(ClientResponseFilter.class).to(BraveClientResponseFilter.class);
+        bind(Config.class);
     }
 }

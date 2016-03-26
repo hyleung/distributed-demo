@@ -25,6 +25,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile "com.squarespace.jersey2-guice:jersey2-guice-impl:1.0.6"
     compile 'com.github.kristofa:brave-jersey2:3.5.0'
+    compile 'com.github.kristofa:brave-spancollector-scribe:3.5.0'
     runtime 'ch.qos.logback:logback-classic:1.1.3'
     testCompile "junit:junit:4.11"
 }
