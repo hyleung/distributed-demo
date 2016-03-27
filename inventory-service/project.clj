@@ -19,8 +19,10 @@
                  [bouncer "0.3.2"]
                  [prone "0.8.1"]
                  [metosin/compojure-api "0.19.3"]
-                 [metosin/ring-swagger-ui "2.1.0-M2-2"]]
-
+                 [metosin/ring-swagger-ui "2.1.0-M2-2"]
+                 [clj-zipkin "0.1.3"]
+                 [clj-tuple "0.2.2"]]
+            
   :min-lein-version "2.0.0"
   :uberjar-name "inventoryService.jar"
   :repl-options {:init-ns inventoryService.handler}

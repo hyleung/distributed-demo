@@ -9,9 +9,7 @@
             [ring.middleware.session-timeout :refer [wrap-idle-session-timeout]]
             [noir-exception.core :refer [wrap-internal-error]]
             [ring.middleware.session.memory :refer [memory-store]]
-            [ring.middleware.format :refer [wrap-restful-format]]
-            
-            ))
+            [ring.middleware.format :refer [wrap-restful-format]]))
 
 (defn log-request [handler]
   (fn [req]
@@ -27,7 +25,6 @@
 
 (defn production-middleware [handler]
   (-> handler
-      
       (wrap-restful-format :formats [:json-kw :edn :transit-json :transit-msgpack])
       (wrap-idle-session-timeout
         {:timeout (* 60 30)
