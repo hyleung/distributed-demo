@@ -3,12 +3,12 @@ package com.example.resource;
 import com.example.domain.ProductInfo;
 import com.example.service.ProductCatalogService;
 import com.google.inject.Inject;
+import ratpack.handling.Context;
+import ratpack.handling.Handler;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
+
+import static ratpack.jackson.Jackson.json;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,8 +16,7 @@ import java.util.List;
  * Time: 9:43 PM
  * To change this template use File | Settings | File Templates.
  */
-@Path("/catalog")
-public class CatalogResource {
+public class CatalogResource implements Handler {
 	private final ProductCatalogService catalogService;
 
 	@Inject
@@ -25,9 +24,12 @@ public class CatalogResource {
 		this.catalogService = catalogService;
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductInfo> retrieveList() {
+	private List<ProductInfo> retrieveList() {
 		return catalogService.fetchAll();
+	}
+
+	@Override
+	public void handle(Context ctx) throws Exception {
+		ctx.render(json(retrieveList()));
 	}
 }

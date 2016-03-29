@@ -3,31 +3,17 @@ package com.example.server;
 import com.example.command.catalog.CatalogCommandFactory;
 import com.example.command.inventory.InventoryCommandFactory;
 import com.example.database.ProductCatalogDb;
-import com.example.domain.ProductInventory;
-import com.example.domain.StoreAvailability;
+import com.example.resource.CatalogResource;
+import com.example.resource.ProductInfoResource;
 import com.example.service.ProductCatalogService;
 import com.example.service.ProductInventoryService;
 import com.example.service.StoreAvailabilityService;
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.ServerTracer;
-import com.github.kristofa.brave.SpanAndEndpoint;
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.servlet.ServletModule;
-import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
-import com.squarespace.jersey2.guice.JerseyGuiceModule;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ratpack.server.RatpackServer;
 
-import java.util.ArrayList;
-import java.util.List;
+import static ratpack.guice.Guice.registry;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,54 +23,34 @@ import java.util.List;
  */
 public class App {
 	private static Logger LOGGER = LoggerFactory.getLogger(App.class);
-	public static void main(String[] args) {
-        List<Module> modules = new ArrayList<>();
+	public static void main(String[] args) throws Exception {
+        final String contextPath = System.getProperty("jettyRun.contextPath","/");
+        final int port = Integer.parseInt(System.getProperty("jettyRun.httpPort", "8080"));
+		RatpackServer.start(s -> s
+                .serverConfig(c -> c.port(port))
+                .registry(registry(binding -> {
+                    binding.module(BraveTraceModule.class);
+                    binding.module(AppModule.class);
+                }))
+				.handlers(chain -> chain
+						.get("catalog", CatalogResource.class)
+						.get("product/:id", ProductInfoResource.class)
+						.all(ctx -> ctx.render("root")))
 
-		modules.add(new JerseyGuiceModule("__HK2_Generated_0"));
-        modules.add(new ServletModule());
-		modules.add(new BraveTraceModule());
-        modules.add(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(ProductCatalogService.class).asEagerSingleton();
-                bind(ProductInventoryService.class).asEagerSingleton();
-                bind(StoreAvailabilityService.class).asEagerSingleton();
-                bind(ProductCatalogDb.class).asEagerSingleton();
-                bind(CatalogCommandFactory.class).asEagerSingleton();
-				bind(InventoryCommandFactory.class).asEagerSingleton();
-            }
-        });
+        );
+	}
 
-        Injector injector = Guice.createInjector(modules);
-        JerseyGuiceUtils.install(injector);
-
-
-		final String contextPath = System.getProperty("jettyRun.contextPath","/");
-		final int port = Integer.parseInt(System.getProperty("jettyRun.httpPort", "8080"));
-		LOGGER.info("Starting Jetty on port {}, context path => {}", port, contextPath);
-		final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-		context.setContextPath(contextPath);
-		final Server server = new Server(port);
-		server.setHandler(context);
-
-		ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/api/*");
-		jerseyServlet.setInitOrder(0);
-
-		jerseyServlet.setInitParameter(
-				"jersey.config.server.provider.packages",
-				"com.example, com.github.kristofa.brave.jaxrs2"
-		);
-
-		ServletHolder hystrixStreamServlet = context.addServlet(HystrixMetricsStreamServlet.class, "/hystrix.stream/*");
-		hystrixStreamServlet.setInitOrder(1);
-
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(),e);
-		} finally {
-			server.destroy();
+	public static class AppModule extends AbstractModule {
+		@Override
+		protected void configure() {
+			bind(CatalogResource.class);
+			bind(ProductInfoResource.class);
+			bind(ProductCatalogService.class).asEagerSingleton();
+			bind(ProductInventoryService.class).asEagerSingleton();
+			bind(StoreAvailabilityService.class).asEagerSingleton();
+			bind(ProductCatalogDb.class).asEagerSingleton();
+			bind(CatalogCommandFactory.class).asEagerSingleton();
+			bind(InventoryCommandFactory.class).asEagerSingleton();
 		}
 	}
 }
