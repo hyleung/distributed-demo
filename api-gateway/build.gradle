@@ -29,7 +29,7 @@ dependencies {
     compile ratpack.dependency("guice")
     compile 'com.google.guava:guava:18.0'
     compile 'com.netflix.hystrix:hystrix-core:1.4.10'
-    compile 'com.netflix.hystrix:hystrix-metrics-event-stream:1.4.10'
+    compile 'io.ratpack:ratpack-hystrix:1.2.0'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.glassfish.jersey.core:jersey-client:2.22.2'
     compile 'com.github.kristofa:brave-jersey2:3.5.0'
