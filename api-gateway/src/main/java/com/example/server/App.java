@@ -8,13 +8,9 @@ import com.example.resource.ProductInfoResource;
 import com.example.service.ProductCatalogService;
 import com.example.service.ProductInventoryService;
 import com.example.service.StoreAvailabilityService;
-import com.example.tracing.BraveTracingDecorator;
-import com.example.tracing.BraveTracingHandler;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ratpack.hystrix.HystrixMetricsEventStreamHandler;
-import ratpack.hystrix.HystrixModule;
 import ratpack.server.RatpackServer;
 
 import static ratpack.guice.Guice.registry;
@@ -35,15 +31,12 @@ public class App {
                 .registry(registry(binding -> {
                     binding.module(BraveTraceModule.class);
                     binding.module(AppModule.class);
-					binding.bind(BraveTracingHandler.class);
-					binding.bind(BraveTracingDecorator.class);
-                    binding.module(new HystrixModule().sse());
                 }))
-				.handlers(handler -> handler
-							.get("catalog", CatalogResource.class)
-							.get("product/:id", ProductInfoResource.class)
-							.get("hystrix.stream", new HystrixMetricsEventStreamHandler())
-							.all(ctx -> ctx.render("root")))
+				.handlers(chain -> chain
+						.get("catalog", CatalogResource.class)
+						.get("product/:id", ProductInfoResource.class)
+						.all(ctx -> ctx.render("root")))
+
         );
 	}
 
