@@ -6,10 +6,10 @@ sbt docker:publishLocal
 cd ../inventory-service
 lein uberimage -t inventory-service:latest
 
-cd ../api-gateway
+cd ../catalog-service
 
 gradle clean jar
-docker build -t api-gateway:latest .
+docker build -t catalog-service:latest .
 
 cd ../dashboard
 gradle clean jar

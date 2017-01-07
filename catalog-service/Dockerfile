@@ -7,7 +7,7 @@ ENV INVENTORY_HOST http://inventory
 
 RUN mkdir -p /opt/app
 
-ADD build/libs/api-gateway.jar /opt/app/
+ADD build/libs/catalog-service.jar /opt/app/
 ADD scripts/startup.sh /opt/app/
 
 WORKDIR /opt/app

@@ -15,7 +15,7 @@ inventory:
     labels:
         com.demo.description: "Inventory Service"
 gateway:
-    image: api-gateway
+    image: catalog-service
     environment:
         STORE_INVENTORY_HOST: http://storeinventory
         INVENTORY_HOST: http://inventory

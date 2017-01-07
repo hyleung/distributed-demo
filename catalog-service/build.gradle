@@ -39,7 +39,7 @@ mainClassName = "com.example.server.App"
 
 
 jar {
-    archiveName = "api-gateway.jar"
+    archiveName = "catalog-service.jar"
     from configurations.runtime.collect {
         zipTree(it)
     }

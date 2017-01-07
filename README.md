@@ -4,16 +4,16 @@
 
 This demo consists of 4 web applications:
 
-- an "API Gateway" (Java - using [Jetty](http://jetty.codehaus.org/) with [Jersey](http://jersey.java.net/))
+- a catalog service (Java - using [Jetty](http://jetty.codehaus.org/) with [Jersey](http://jersey.java.net/))
 - an inventory service (Clojure w/[Luminus](http://www.luminusweb.net))
 - a "in-store" inventory service (Scala - using [Play Framework](http://playframework.com/))
 - a [Hystrix](https://github.com/Netflix/Hystrix) Dashboard (Jetty)
 
 ###Building and running the web apps
 
-####Start the API Gateway
+####Start the Catalog service
 
-    cd api-gateway
+    cd catalog-service
     gradle run 
 
 The service will start by default on port 8080.
@@ -52,15 +52,15 @@ The general gist of this demo…we have a commerce-y website. Displays the produ
 In addition to this basic information, we also surface information regarding the avaiability of the product - whether the product is currently
 "In Stock" as well as whether the product is availabile in local ("bricks-and-mortar") stores.
 
-The data driving the site is provided by a sort of [API Gateway](http://microservices.io/patterns/apigateway.html). Some of the data (the product 
-catalog) is sourced from the gateway's own "database" directly. Information pertaining to availability is obtained via API calls to other services.
+The data driving the site is provided by a product catalog service. Some of the data returned from the catalog service is sourced from the service's own "database" directly. 
+Information pertaining to availability is obtained via API calls to other services.
 
 The availability information is really just a "nice-to-have" bit of functionality. Users still need to be able to browse the product listings and (though
 it's not implemneted) presumeably be able to place orders, etc. 
 
 ##Scenario: View Product Catalog
 
-This scenario is fairly uninteresting - _all_ the data presented here is sourced directly from the API Gateway. We *do*, however, want this feature to 
+This scenario is fairly uninteresting - _all_ the data presented here is sourced directly from the catalog service. We *do*, however, want this feature to 
 be as available as possible.
 
 ![Product Catalog](images/product_catalog.png)

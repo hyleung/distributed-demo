@@ -22,7 +22,7 @@ public class BraveTraceModule extends AbstractModule {
     @Provides
     public Brave brave(final Config config) {
         Brave.Builder builder = new Brave
-                .Builder("api-gateway");
+                .Builder("catalog-service");
         if (config.scribeHost().isPresent() && config.scribePort().isPresent()) {
             builder.spanCollector(new ScribeSpanCollector(config.scribeHost().get(),
                     config.scribePort().get()));
@@ -68,7 +68,7 @@ public class BraveTraceModule extends AbstractModule {
 
     @Provides
     public ServiceNameProvider serviceNameProvider() {
-        return new StringServiceNameProvider("api-gateway");
+        return new StringServiceNameProvider("catalog-service");
     }
 
     @Override
